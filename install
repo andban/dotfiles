@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+ROOT=$(pwd)
+
+set -e
+
+echo ''
+
+prompt() {
+    printf "\r      \033[0;33m?\033[0m - $1 "
+}
+
+info() {
+    printf "\r   \033[00;34mINFO\033[0m - $1\n"
+}
+
+success() {
+    printf "\r\033[00;32mSUCCESS\033[0m - $1\n"
+}
+
+error() {
+    printf "\r\033[00;31mFAILURE\033[0m - $1\n"
+}
+
+
+backup_all="false"
+force_all="false"
+skip_all="false"
+
+link_file() {
+    local src=$1
+    local dst=$2
+    local skip=
+    local force=
+    local backup=
+    local action=
+
+    # if $dst already exists...
+    if [ -f "$dst" -o -d "$dst" -o -L "$dst" ]; then
+        # ... and we do not force copies and backups, but also do not want to skip...
+        if [  "$force_all" == "false" ] && [ "$backup_all" == "false" ] && [ "$skip_all" == "false" ]; then
+            local oldSrc="$(readlink $dst)"
+            if [ "$oldSrc" == "$src" ]; then
+                skip=true
+            else
+                prompt "file '$(basename "$src") already exists, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all?"
+                read -n 1 action
+                case "$action" in
+                    s)
+                        skip=true
+                        ;;
+                    S)
+                        skip_all=true
+                        ;;
+                    o)
+                        force=true
+                        ;;
+                    O)
+                        force_all=true
+                        ;;
+                    b)
+                        backup=true
+                        ;;
+                    B)
+                        backup_all=true
+                        ;;
+                    *)
+                        ;;
+                esac
+            fi
+        fi
+
+        force=${force:-$force_all}
+        backup=${backup:-$backup_all}
+        skip=${skip:-$skip_all}
+
+        if [ "$force" == "true" ]; then
+            rm -rf "$dst"
+            info "removed $dst"
+        fi
+
+        if [ "$backup" == "true" ]; then
+            mv "$dst" "${dst}.backup"
+            info "moved $dst to ${dst}.backup"
+        fi
+
+        if [ "$skip" == "true" ]; then
+            info "skipped $src"
+        fi
+    fi
+
+    if [ "$skip" != "true" ]; then
+        ln -s "$src" "$dst"
+        success "linked $src -> $dst"
+    fi
+}
+
+copy_dotfiles() {
+    info "copying dotfiles..."
+
+    local force_all=false
+    local skip_all=false
+    local backup_all=false
+
+    for src in $(find "$ROOT" -mindepth 1 -maxdepth 1 ! -name "$(basename "$0")" ! -name "brews" ! -name ".git" ! -name "*.md"); do
+        dst="$HOME/.$(basename "$src")"
+        link_file "$src" "$dst"
+    done
+}
+
+if [ "$(uname -s)" == "Darwin" ] && ! [ $(which brew 2> /dev/null) ]; then
+    info "installing homebrew"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    brew update
+    brew install clib gnupg2 gpg-agent keybase lua luarocks node zsh-completions
+    brew install --cocoa -srgb emacs
+    brew install caskroom/cask/brew-cask
+    brew cask tap caskroom/versions
+    brew cask install google-chrome
+    brew cask install coconutbattery
+    brew cask install sublime-text3
+    brew cask install carbon-copy-cloner
+    brew cask install instacast
+    brew cask install moneymoney
+    brew cask install the-unarchiver
+    brew cask install virtualbox
+    brew cask install vagrant
+fi
+
+
+
+copy_dotfiles

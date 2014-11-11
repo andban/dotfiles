@@ -1,0 +1,57 @@
+[user]
+	name = Andreas Bannach
+	email = andreas@borntohula.de
+
+[github]
+        user = andban
+
+[core]
+	editor = emacsclient
+	excludesfile = /Users/andreas/.gitignore_global
+
+[color]
+	ui = true
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[push]
+	default = current
+
+[log]
+        abbrevCommit = true
+
+[format]
+  pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
+  graph = true
+
+[advice]
+        statusHints = false
+
+[url "git@github.com:"]
+     insteadOf = "gh://"
+     pushInsteadOf = "gh://"
+     pushInsteadOf = "git://github.com/"
+
+#[alias]
+#        squash = !sh "$HOME/.git-extras/git-squash.sh"
+#        changelog = !sh "$HOME/.git-extras/git-changelog.sh"
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
