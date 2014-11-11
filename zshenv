@@ -10,6 +10,17 @@ if [ -x /usr/libexec/path_helper ]; then
     eval `/usr/libexec/path_helper -s`
 fi
 
+# gather info about the system
+export OS_FAMILY=$(uname -s)
+export OS_FLAVOR=$OS_FAMILY
+export OS_RELEASE=$(uname -r)
+
+if [ -f /etc/arch-release ]; then
+    OS_FLAVOR='Arch'
+elif [ -f /etc/debian_version ] || [ -f /etc/lsb-release ]; then
+    OS_FLAVOR='Debian'
+fi
+
 export TERM=xterm-256color
 
 export CLICOLOR=1
