@@ -96,38 +96,33 @@ link_file() {
     fi
 }
 
-copy_dotfiles() {
+setup_dotfiles() {
     info "copying dotfiles..."
 
     local force_all=false
     local skip_all=false
     local backup_all=false
 
-    for src in $(find "$ROOT" -mindepth 1 -maxdepth 1 ! -name "$(basename "$0")" ! -name "brews" ! -name ".git" ! -name "*.md"); do
+    for src in $(find "$ROOT/home" -mindepth 1 -maxdepth 1); do
         dst="$HOME/.$(basename "$src")"
         link_file "$src" "$dst"
     done
 }
 
-if [ "$(uname -s)" == "Darwin" ] && ! [ $(which brew 2> /dev/null) ]; then
-    info "installing homebrew"
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    brew update
-    brew install clib gnupg2 gpg-agent keybase lua luarocks node zsh-completions
-    brew install --cocoa -srgb emacs
-    brew install caskroom/cask/brew-cask
-    brew cask tap caskroom/versions
-    brew cask install google-chrome
-    brew cask install coconutbattery
-    brew cask install sublime-text3
-    brew cask install carbon-copy-cloner
-    brew cask install instacast
-    brew cask install moneymoney
-    brew cask install the-unarchiver
-    brew cask install virtualbox
-    brew cask install vagrant
-fi
+setup_homebrew() {
+    if [ "$(uname -s)" == "Darwin" ]; then
+	info "setting up homebrew..."
+	source script/setup_homebrew
+    fi
+}
 
+setup_sublime() {
+    if [ "$(uname -s)" == "Darwin" ]; then
+	info "setting up sublime..."
+	source script/setup_sublime
+    fi
+}
 
-
-copy_dotfiles
+setup_dotfiles
+#setup_homebrew
+setup_sublime

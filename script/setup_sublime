@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+ROOT=$(pwd)
+
+SUBL_ROOT="$HOME/Library/Application Support/Sublime Text 3"
+
+mkdir -p "$SUBL_ROOT"
+
+if [ -f "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" -o -L "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" ]; then
+    rm "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
+fi
+   
+ln -s "$ROOT/sublime/Preferences.sublime-settings" "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
+
+#ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "/usr/local/bin/subl"
