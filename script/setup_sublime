@@ -6,10 +6,22 @@ SUBL_ROOT="$HOME/Library/Application Support/Sublime Text 3"
 
 mkdir -p "$SUBL_ROOT"
 
+mkdir -p "$SUBL_ROOT/Packages/User"
 if [ -f "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" -o -L "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" ]; then
     rm "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
 fi
-   
 ln -s "$ROOT/sublime/Preferences.sublime-settings" "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
 
-#ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "/usr/local/bin/subl"
+mkdir -p "$SUBL_ROOT/Installed Packages"
+if ! [ -f "$SUBL_ROOT/Installed Packages/Package Control.sublime-package" -o -L "$SUBL_ROOT/Installed Packages/Package Control.sublime-package"]; then
+  curl -o "$SUBL_ROOT/Installed Packages/Package Control.sublime-package" "https://sublime.wbond.net/Package%20Control.sublime-package"
+fi
+
+if ! [ -f "$SUBL_ROOT/Packages/User/Package Control.sublime-settings" -o -L "$SUBL_ROOT/Packages/User/Package Control.sublime-settings" ]; then
+  ln -s "$ROOT/sublime/Package Control.sublime-settings" "$SUBL_ROOT/Packages/User/Package Control.sublime-settings"
+fi
+
+
+if ! [ -L "/usr/local/bin/subl" ]; then
+  ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "/usr/local/bin/subl"
+fi
