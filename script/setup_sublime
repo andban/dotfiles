@@ -38,7 +38,13 @@ download_pkgcrtl() {
 
 create_subl() {
   local dst="/usr/local/bin/subl"
-  local src="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+  local src=
+  if [ -x "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ]; then
+    src="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+  elif [ -x "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"]; then
+    src="$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+  fi
+
   link_file "$src" "$dst"
 }
 
