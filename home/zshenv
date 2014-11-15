@@ -31,7 +31,7 @@ export GREP_COLOR='3;33'
 
 # setup editor and pager
 export EDITOR="subl -w -n"
-export VISUAL='subl -w -n'
+export VISUAL=$EDITOR
 export PAGER="less"
 export LESS="--ignore-case --raw-control-chars"
 

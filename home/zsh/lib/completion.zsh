@@ -1,3 +1,11 @@
+if [ -x "/usr/local/share/zsh-completions" ]; then
+    fpath=(/usr/local/share/zsh-completions $fpath)
+fi
+
+# init auto completion
+autoload -U compinit
+compinit -i
+
 
 # don't autoselect first hit
 unsetopt menu_complete
@@ -76,6 +84,3 @@ fi
 
 zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
 
-if [ -x "/usr/local/share/zsh-completions" ]; then
-    fpath=(/usr/local/share/zsh-completions $fpath)
-fi

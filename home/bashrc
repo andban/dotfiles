@@ -1,3 +1,20 @@
+# interactive or bust
+[ -z "$PS1" ] && return
+
+HISTCONTROL=ignoredups:ignorespace
+shopt -s histappend
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+shopt -s checkwinsize
+
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+if [ -f /usr/local/etc/bash_completion ] && ! shopt -oq posix; then
+    . /usr/local/etc/bash_completion
+fi
 
 . ~/.zsh/lib/aliases.zsh
 
@@ -39,7 +56,10 @@ __prompt() {
             local FG_EXIT="$FG_BAD"
         fi
 
-        PS1="\n$FG_PATH\w$RESET"
+        #printf "\[\033]0;\w\007"
+
+        PS1="\[\033]0;\w\007"
+        PS1+="\n$FG_PATH\w$RESET"
         PS1+=" $(__git_info)"
         PS1+="\n$FG_EXIT$PS_SYMBOL $RESET"
     }
