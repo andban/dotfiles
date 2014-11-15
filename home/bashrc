@@ -1,56 +1,49 @@
 
 . ~/.zsh/lib/aliases.zsh
 
+__prompt() {
+    readonly GIT_HAS_CHANGES='*'
+    readonly GIT_IS_AHEAD='⇡'
+    readonly GIT_IS_BEHIND='⇣'
 
-prompt_git() {
-    local s=''
-    local branch=''
+    readonly FG_PATH="\[$(tput setaf 4)\]"
+    readonly FG_OK="\[$(tput setaf 2)\]"
+    readonly FG_BAD="\[$(tput setaf 1)\]"
+    readonly FG_GIT="\[$(tput setaf 15)\]"
+    readonly RESET="\[$(tput rev)\]"
 
-    # Check if the current directory is in a Git repository.
-    if [ $(git rev-parse --is-inside-work-tree &>/dev/null; echo "${?}") == '0' ]; then
-        echo 'hello'
-        # check if the current directory is in .git before running git checks
-        if [ "$(git rev-parse --is-inside-git-dir 2> /dev/null)" == 'false' ]; then
+    __git_info() {
+        [ -x "$(which git)" ] || return
 
-            # Ensure the index is up to date.
-            git update-index --really-refresh -q &>/dev/null;
+        local branch="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
+        [ -n "$branch" ] || return # no branch found
 
-            # Check for uncommitted changes in the index.
-            if ! $(git diff --quiet --ignore-submodules --cached); then
-                s+='+';
-            fi;
+        local marks
+        [ -n "$(git status --porcelain)" ] && marks+="$GIT_HAS_CHANGES"
 
-            # Check for unstaged changes.
-            if ! $(git diff-files --quiet --ignore-submodules --); then
-                s+='!';
-            fi;
+        local stat="$(git status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
+        local ahead="$(echo $stat | grep -o 'ahead \d\+' | grep -o '\d\+')"
+        local behind="$(echo $stat | grep -o 'behind \d\+' | grep -o '\d\+')"
+        [ -n "$behind" ] && marks+=" $GIT_IS_BEHIND"
+        [ -n "$ahead" ] && marks+=" $GIT_IS_AHEAD"
 
-            # Check for untracked files.
-            if [ -n "$(git ls-files --others --exclude-standard)" ]; then
-                s+='?';
-            fi;
+        printf " $branch$marks "
+    }
 
-            # Check for stashed files.
-            if $(git rev-parse --verify refs/stash &>/dev/null); then
-                s+='$';
-            fi;
-        fi;
+    ps1() {
+        if [ $? -eq 0 ]; then
+            local FG_EXIT="$FG_OK"
+        else
+            local FG_EXIT="$FG_BAD"
+        fi
 
-        # Get the short symbolic ref.
-        # If HEAD isn’t a symbolic ref, get the short SHA for the latest commit
-        # Otherwise, just give up.
-        branch="$(git symbolic-ref --quiet --short HEAD 2> /dev/null || \
-git rev-parse --short HEAD 2> /dev/null || \
-echo '(unknown)')";
+        PS1="\n$FG_PATH\w $RESET"
+        PS1+="$FG_GIT $(__git_info) $RESET"
+        PS1+="\n$FG_EXIT$PS_SYMBOL $RESET"
+    }
 
-        [ -n "${s}" ] && s=" [${s}]";
-
-        echo -e "${1}${branch}${s}";
-    else
-        return;
-    fi;
+    PROMPT_COMMAND=ps1
 }
 
-user="@"
-g=prompt_git ":"
-PS1="   ${user} \W${g} > "
+__prompt
+unset __prompt
