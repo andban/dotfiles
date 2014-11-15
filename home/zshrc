@@ -1,4 +1,8 @@
 export ZSH_HOME=~/.zsh
+fpath=($ZSH_HOME/lib $fpath)
+
+autoload -U promptinit && promptinit
+prompt pure
 
 # init auto completion
 autoload -U compinit
@@ -7,6 +11,10 @@ compinit -i
 # do not beep
 setopt no_beep
 
+setopt autocd
+setopt extendedglob
+
+export CLICOLOR=1
 
 # load config files
 for f in $ZSH_HOME/lib/*.zsh; do

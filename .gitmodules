@@ -1,0 +1,9 @@
+[submodule "home/zsh/lib/pure"]
+	path = home/zsh/lib/pure
+	url = https://github.com/sindresorhus/pure
+[submodule "home/zsh/lib/zsh-syntax-highlighting"]
+	path = home/zsh/lib/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+[submodule "tomorrow-theme"]
+	path = tomorrow-theme
+	url = https://github.com/chriskempson/tomorrow-theme
