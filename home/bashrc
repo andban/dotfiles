@@ -2,15 +2,17 @@
 . ~/.zsh/lib/aliases.zsh
 
 __prompt() {
+    readonly PS_SYMBOL='❯'
     readonly GIT_HAS_CHANGES='*'
     readonly GIT_IS_AHEAD='⇡'
     readonly GIT_IS_BEHIND='⇣'
 
-    readonly FG_PATH="\[$(tput setaf 4)\]"
-    readonly FG_OK="\[$(tput setaf 2)\]"
-    readonly FG_BAD="\[$(tput setaf 1)\]"
-    readonly FG_GIT="\[$(tput setaf 15)\]"
-    readonly RESET="\[$(tput rev)\]"
+    readonly FG_PATH="\[\033[1;34m\]"
+    readonly FG_OK="\[\033[1;35m\]"
+    readonly FG_BAD="\[\033[1;31m\]"
+    readonly FG_GIT_BRANCH="\[\033[1;30m\]"
+    readonly FG_GIT_STATUS="\[\033[1;36m\]"
+    readonly RESET="\[\033[0m\]"
 
     __git_info() {
         [ -x "$(which git)" ] || return
@@ -18,16 +20,16 @@ __prompt() {
         local branch="$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --always 2>/dev/null)"
         [ -n "$branch" ] || return # no branch found
 
-        local marks
-        [ -n "$(git status --porcelain)" ] && marks+="$GIT_HAS_CHANGES"
+        [ -n "$(git status --porcelain)" ] && branch+="$GIT_HAS_CHANGES"
 
+        local marks
         local stat="$(git status --porcelain --branch | grep '^##' | grep -o '\[.\+\]$')"
-        local ahead="$(echo $stat | grep -o 'ahead \d\+' | grep -o '\d\+')"
-        local behind="$(echo $stat | grep -o 'behind \d\+' | grep -o '\d\+')"
+        local ahead="$(echo $stat | grep -o 'ahead [0-9]\+' | grep -o '[0-9]\+')"
+        local behind="$(echo $stat | grep -o 'behind [0-9]\+' | grep -o '[0-9]\+')"
         [ -n "$behind" ] && marks+=" $GIT_IS_BEHIND"
         [ -n "$ahead" ] && marks+=" $GIT_IS_AHEAD"
 
-        printf " $branch$marks "
+        printf "$FG_GIT_BRANCH$branch$RESET   $FG_GIT_STATUS$marks$RESET"
     }
 
     ps1() {
@@ -37,8 +39,8 @@ __prompt() {
             local FG_EXIT="$FG_BAD"
         fi
 
-        PS1="\n$FG_PATH\w $RESET"
-        PS1+="$FG_GIT $(__git_info) $RESET"
+        PS1="\n$FG_PATH\w$RESET"
+        PS1+=" $(__git_info)"
         PS1+="\n$FG_EXIT$PS_SYMBOL $RESET"
     }
 
