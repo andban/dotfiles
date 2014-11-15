@@ -1,27 +1,47 @@
 #!/usr/bin/env bash
 
-ROOT=$(pwd)
-
-SUBL_ROOT="$HOME/Library/Application Support/Sublime Text 3"
-
-mkdir -p "$SUBL_ROOT"
-
-mkdir -p "$SUBL_ROOT/Packages/User"
-if [ -f "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" -o -L "$SUBL_ROOT/Packages/User/Preferences.sublime-settings" ]; then
-    rm "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
-fi
-ln -s "$ROOT/sublime/Preferences.sublime-settings" "$SUBL_ROOT/Packages/User/Preferences.sublime-settings"
-
-mkdir -p "$SUBL_ROOT/Installed Packages"
-if ! [ -f "$SUBL_ROOT/Installed Packages/Package Control.sublime-package" -o -L "$SUBL_ROOT/Installed Packages/Package Control.sublime-package"]; then
-  curl -o "$SUBL_ROOT/Installed Packages/Package Control.sublime-package" "https://sublime.wbond.net/Package%20Control.sublime-package"
+if [ is_osx ]; then
+  SUBL_HOME="$HOME/Library/Application Support/Sublime Text 3"
+elif [ is_windows ]; then
+  SUBL_HOME="$APPDATA/Sublime Text 3"
+elif [ is_linux ]; then
+  SUBL_HOME="$HOME/.config/sublime-text-3"
+else
+  error "unable to determine os version"
 fi
 
-if ! [ -f "$SUBL_ROOT/Packages/User/Package Control.sublime-settings" -o -L "$SUBL_ROOT/Packages/User/Package Control.sublime-settings" ]; then
-  ln -s "$ROOT/sublime/Package Control.sublime-settings" "$SUBL_ROOT/Packages/User/Package Control.sublime-settings"
-fi
+#mkdir -p "$SUBL_PREFS"
+#mkdir -p "$SUBL_PKGS"
 
+setup_files() {
+  local force_all=false
+  local skip_all=false
+  local backup_all=false
 
-if ! [ -L "/usr/local/bin/subl" ]; then
-  ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "/usr/local/bin/subl"
-fi
+  local sifs=$IFS
+  IFS=$(echo -en "\n\b")
+  for src in $(find "$ROOT/sublime" -mindepth 1); do
+    local dst="$SUBL_HOME/Packages/User/$(basename "$src")"
+    echo "$dst"
+    link_file "$src" "$dst"
+  done
+  IFS=$sifs
+}
+
+download_pkgcrtl() {
+  local dst="$SUBL_HOME/Installed Packages/Package Control.sublime-package"
+
+  if ! [ -f "$dst" -o -L "$dst" ]; then
+    curl -o "$dst" "https://sublime.wbond.net/Package%20Control.sublime-package"
+  fi
+}
+
+create_subl() {
+  local dst="/usr/local/bin/subl"
+  local src="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
+  link_file "$src" "$dst"
+}
+
+setup_files
+download_pkgcrtl
+create_subl

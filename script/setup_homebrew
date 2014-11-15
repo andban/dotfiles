@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ $(which brew 1> /dev/null) ]; then
+if [ $(which brew > /dev/null) ]; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
@@ -10,7 +10,7 @@ brew install clib gnupg2 gpg-agent keybase lua luarocks node zsh-completions
 brew install --cocoa -srgb emacs
 
 brew install caskroom/cask/brew-cask
-brew cask tap caskroom/versions
+brew tap caskroom/versions
 
 brew cask install google-chrome
 brew cask install coconutbattery

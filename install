@@ -23,14 +23,28 @@ error() {
     printf "\r\033[00;31mFAILURE\033[0m - $1\n"
 }
 
+is_osx() {
+    [ "$(uname -s)" == "Darwin" ]
+    return $?
+}
+
+is_windows() {
+    [ "$(uname -s)" == "MINGW*" -o "$(uname -s)" == "CYGWIN" ]
+    return $?
+}
+
+is_linux() {
+    [ "$(uname -s)" == "Linux" ]
+    return $?
+}
 
 backup_all="false"
 force_all="false"
 skip_all="false"
 
 link_file() {
-    local src=$1
-    local dst=$2
+    local src="$1"
+    local dst="$2"
     local skip=
     local force=
     local backup=
@@ -91,6 +105,11 @@ link_file() {
     fi
 
     if [ "$skip" != "true" ]; then
+        if ! [ -d "$(dirname "$dst")" ]; then
+            mkdir -p "$(dirname "$dst")"
+            info "created directory $(dirname "$dst")"
+        fi
+
         ln -s "$src" "$dst"
         success "linked $src -> $dst"
     fi
@@ -110,19 +129,19 @@ setup_dotfiles() {
 }
 
 setup_homebrew() {
-    if [ "$(uname -s)" == "Darwin" ]; then
-	info "setting up homebrew..."
-	source script/setup_homebrew
+    if [ is_osx ]; then
+	   info "setting up homebrew..."
+	   source script/setup_homebrew
     fi
 }
 
 setup_sublime() {
-    if [ "$(uname -s)" == "Darwin" ]; then
-	info "setting up sublime..."
-	source script/setup_sublime
+    if [ is_osx -o is_windows ]; then
+	   info "setting up sublime..."
+	   source script/setup_sublime
     fi
 }
 
 setup_dotfiles
-#setup_homebrew
+setup_homebrew
 setup_sublime
