@@ -11,6 +11,8 @@
 	"font_size": 13,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
+	"hot_exit": false,
+  "remember_open_files": false,
 	"ignored_packages":
 	[
 		"Vintage"
