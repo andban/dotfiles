@@ -1,8 +1,13 @@
 {
 	"installed_packages":
 	[
+		"AdvancedNewFile",
+		"Ansible",
 		"GitGutter",
+		"MarkdownEditing",
+		"Open URL",
 		"Puppet",
+		"PyRefactor",
 		"SideBarEnhancements",
 		"Terminal"
 	]
