@@ -41,7 +41,7 @@ create_subl() {
   local src=
   if [ -x "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ]; then
     src="/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
-  elif [ -x "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"]; then
+  elif [ -x "$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" ]; then
     src="$HOME/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl"
   fi
 
