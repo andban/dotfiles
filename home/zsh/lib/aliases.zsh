@@ -71,9 +71,9 @@ function gca() {
 # MacOS
 #######################################################################
 
-if [[ $OS == "Darwin" ]]; then
-    if [ -x /Application/love.app/Contents/MacOS/love ]; then
-        alias love="/Applications/love.app/Contents/MacOS/love"
+if [[ $OS_FAMILY == "Darwin" ]]; then
+    if [ -x ~/Applications/love.app/Contents/MacOS/love ]; then
+        alias love="~/Applications/love.app/Contents/MacOS/love"
     fi
 
     # use case insensitive matching and show full paths to binaries
