@@ -6,7 +6,7 @@
         user = andban
 
 [core]
-	editor = emacsclient
+	editor = subl -nw
 	excludesfile = /Users/andreas/.gitignore_global
 
 [color]
