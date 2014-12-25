@@ -42,6 +42,29 @@ function edit() {
 }
 alias e='edit'
 
+# create a SSL certificate for $1 as tld
+function ssl_cert() {
+    local tld=$1
+
+    cat > /tmp/openssl.cnf <<-EOF
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+CN = *.${tld}
+[v3_req]
+keyUsage = keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = *.${tld}
+DNS.2 = ${tld}
+EOF
+    openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout "${tld}.key" -out "${tld}.crt" -config "/tmp/openssl.cnf"
+
+    rm /tmp/openssl.cnf
+}
 
 # GIT
 #######################################################################
