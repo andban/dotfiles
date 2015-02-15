@@ -61,7 +61,7 @@ subjectAltName = @alt_names
 DNS.1 = *.${tld}
 DNS.2 = ${tld}
 EOF
-    openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -keyout "${tld}.key" -out "${tld}.crt" -config "/tmp/openssl.cnf"
+    openssl req -new -newkey rsa:2048 -days 3650 -nodes -x509 -sha256 -keyout "${tld}.key" -out "${tld}.crt" -config "/tmp/openssl.cnf"
 
     rm /tmp/openssl.cnf
 }
