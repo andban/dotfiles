@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: React.createClass
+# key: rcc
+# --
+React.createClass({
+  $0
+});

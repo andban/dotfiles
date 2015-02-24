@@ -6,13 +6,28 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+; make sure essential directories are present
+(let* ((subdirs '("backups" "snippets" "ac-dict"))
+       (fulldirs (mapcar (lambda (d) (concat user-emacs-directory d)) subdirs)))
+  (dolist (dir fulldirs)
+    (when (not (file-exists-p dir))
+      (message "creating directory: %s" dir)
+      (make-directory dir))))
+
+; move custom emacs configurations out of this file
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+
 ;;
 ;; initialize package manager
 ;;
 
 (require 'package)
 
-(setq required-packages '(auto-complete
+(setq required-packages '(ag
+                          auto-complete
                           ac-c-headers
                           ac-etags
                           ac-js2
@@ -20,24 +35,33 @@
                           clojure-mode
                           dash-at-point
                           diminish
+                          emmet-mode
                           enh-ruby-mode
                           fill-column-indicator
                           flx-ido
+                          flycheck
                           flymake-ruby
                           git-gutter
+                          go-mode
+                          grizzl
+                          handlebars-mode
                           highlight-indentation
                           highlight-parentheses
+                          ido-vertical-mode
                           jedi
                           magit
                           markdown-mode
+                          mustache-mode
                           paredit
                           projectile
                           python-environment
                           python-mode
                           rainbow-delimiters
+                          s
                           smartparens
                           soft-charcoal-theme
                           soft-morning-theme
+                          sr-speedbar
                           theme-changer
                           web-mode))
 
@@ -65,13 +89,15 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+
 ;;
 ;; basics
 ;;
 
-;;move custom emacs configurations out of this file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file)
+(if (equal "abannach" user-login-name)
+    (setq user-mail-address "andreas.bannach@igd.fraunhofer.de")
+  (setq user-mail-address "andreas@borntohula.de"))
+
 
 ;;skip the advertisement
 (setq inhibit-startup-message t)
@@ -107,6 +133,10 @@
 ;;enable external clipboard
 (setq x-select-enable-clipboard t)
 
+(require 'sr-speedbar)
+(setq speedbar-show-unknown-file t)
+(setq speedbar-use-images nil)
+(setq sr-speedbar-right-side nil)
 
                                         ; delete current selection on insert
 (transient-mark-mode 1)
@@ -142,6 +172,18 @@
 (require 'fill-column-indicator)
 (setq fci-rule-column 80)
 
+;;
+;; shell
+;;
+(require 'multi-term)
+(setq multi-term-program "/bin/zsh")
+
+(add-hook 'term-exec-hook
+          (function
+           (lambda ()
+             (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))))
+(add-hook 'term-mode-hook (lambda ()
+                            (yas-minor-mode -1)))
 ;;
 ;; appearance
 ;;
@@ -196,8 +238,11 @@
       ido-max-prospects 10)
 
 (ido-everywhere 1)
-                                        ;(ido-vertical-mode)
 (setq ido-use-faces nil)
+
+(require 'ido-vertical-mode)
+(ido-vertical-mode)
+(setq ido-vertical-define-keys 'C-n-C-o-up-down-left-right)
 
 (flx-ido-mode 1)
 
@@ -210,9 +255,11 @@
 ;; projectile
 ;;
 (require 'projectile)
+(require 'grizzl)
 
 (projectile-global-mode)
-(setq projectile-enable-caching 0)
+(setq projectile-enable-caching t)
+(setq projectile-indexing-method 'grizzl)
 
 ;;cmd-p for find in project
 (global-set-key (kbd "s-p") 'projectile-find-file)
@@ -265,12 +312,23 @@
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
+(global-auto-complete-mode t)
 (setq ac-delay 0.5)
+(setq ac-auto-start 2)
+(setq ac-ignore-case nil)
 (ac-flyspell-workaround)
 
 (setq ac-etags-requires 1)
 (eval-after-load "etags"
   '(progn (ac-etags-setup)))
+
+
+;;
+;; snippets
+;;
+(require 'yasnippet)
+(yas/initialize)
+(add-to-list 'ac-sources 'ac-sources-yasnippet)
 
 ;;
 ;; mac os setup
@@ -327,14 +385,18 @@
 
 
 ;;
-;; javascript
+;; javascript and web stuff
 ;;
 (autoload 'js2-mode "js2-mode" "JavaScript Mode" t)
 
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+
 (add-to-list 'auto-mode-alist '("\\.json\\'" . js2-mode))
 (add-to-list 'magic-mode-alist '("#!/usr/bin/env node" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.bowerrc\\'" . js2-mode))
+
+(setq ac-js2-evaluate-calls t)
+(add-hook 'js2-mode-hook 'ac-js2-mode)
 
 (autoload 'web-mode "web-mode")
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
@@ -345,9 +407,20 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
 
-(setq ac-js2-evaluate-calls t)
-(add-hook 'js2-mode-hook 'ac-js2-mode)
+(defun customize-web-mode ()
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+(add-hook 'web-mode-hook  'customize-web-mode)
+
+(add-hook 'sgml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
+(add-hook 'emmet-mode-hook (lambda (setq emmet-indentation 2)))
+
+(setq emmet-move-cursor-between-quotes t)
 
 
 ;;
