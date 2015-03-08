@@ -38,6 +38,12 @@ is_linux() {
     return $?
 }
 
+is_freebsd() {
+    [ "$(uname -s)" == "FreeBSD" ]
+    return $?
+}
+
+
 backup_all="false"
 force_all="false"
 skip_all="false"
@@ -129,14 +135,14 @@ setup_dotfiles() {
 }
 
 setup_homebrew() {
-    if [ is_osx ]; then
+    if is_osx; then
 	   info "setting up homebrew..."
 	   source script/setup_homebrew
     fi
 }
 
 setup_sublime() {
-    if [ is_osx -o is_windows ]; then
+    if is_osx || is_windows ; then
 	   info "setting up sublime..."
 	   source script/setup_sublime
     fi

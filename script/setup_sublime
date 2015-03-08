@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-if [ is_osx ]; then
+if is_osx; then
   SUBL_HOME="$HOME/Library/Application Support/Sublime Text 3"
-elif [ is_windows ]; then
+elif is_windows; then
   SUBL_HOME="$APPDATA/Sublime Text 3"
-elif [ is_linux ]; then
+elif is_linux; then
   SUBL_HOME="$HOME/.config/sublime-text-3"
 else
   error "unable to determine os version"
