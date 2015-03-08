@@ -12,10 +12,6 @@ setopt extendedglob
 
 export CLICOLOR=1
 
-# nvm
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
-
 # load config files
 for f in $ZSH_HOME/lib/*.zsh; do
     source $f
