@@ -44,7 +44,7 @@ if which rbenv &> /dev/null; then
     eval "$(rbenv init -)"
 fi
 
-if which brew &> /dev/null && brew --prefix nvm; then
+if which brew &> /dev/null && brew --prefix nvm &> /dev/null ; then
     export NVM_DIR=~/.nvm
     source $(brew --prefix nvm)/nvm.sh
 fi
