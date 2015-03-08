@@ -51,6 +51,7 @@
                           jedi
                           magit
                           markdown-mode
+                          multi-term
                           mustache-mode
                           paredit
                           projectile
@@ -63,7 +64,8 @@
                           soft-morning-theme
                           sr-speedbar
                           theme-changer
-                          web-mode))
+                          web-mode
+                          yasnippet))
 
 ;;add melpa repository
 (add-to-list 'package-archives
