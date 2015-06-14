@@ -10,6 +10,8 @@ if [ -x /usr/libexec/path_helper ]; then
     eval `/usr/libexec/path_helper -s`
 fi
 
+export PATH="/usr/local/sbin:$PATH"
+
 # gather info about the system
 export OS_FAMILY=$(uname -s)
 export OS_FLAVOR=$OS_FAMILY
@@ -30,7 +32,7 @@ export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='3;33'
 
 # setup editor and pager
-export EDITOR="subl -w -n"
+export EDITOR="vim"
 export VISUAL=$EDITOR
 export PAGER="less"
 export LESS="--ignore-case --raw-control-chars"
@@ -48,7 +50,7 @@ if which brew &> /dev/null && brew --prefix nvm &> /dev/null ; then
     export NVM_DIR=~/.nvm
     source $(brew --prefix nvm)/nvm.sh
 fi
-    
+
 # setup pip
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE="$HOME/.pip/cache"

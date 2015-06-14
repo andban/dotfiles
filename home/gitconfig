@@ -3,10 +3,10 @@
 	email = andreas@borntohula.de
 
 [github]
-        user = andban
+  user = andban
 
 [core]
-	editor = subl -nw
+	editor = vim
 	excludesfile = /Users/andreas/.gitignore_global
 
 [color]
