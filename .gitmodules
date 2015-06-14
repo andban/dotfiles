@@ -7,3 +7,21 @@
 [submodule "tomorrow-theme"]
 	path = tomorrow-theme
 	url = https://github.com/chriskempson/tomorrow-theme
+[submodule "home/vim/bundle/vim-pathogen"]
+	path = home/vim/bundle/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen.git
+[submodule "home/vim/bundle/nerdtree"]
+	path = home/vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "home/vim/bundle/syntastic"]
+	path = home/vim/bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule "home/vim/bundle/vim-javascript-syntax"]
+	path = home/vim/bundle/vim-javascript-syntax
+	url = https://github.com/jelera/vim-javascript-syntax.git
+[submodule "home/vim/bundle/JavaScript-Indent"]
+	path = home/vim/bundle/JavaScript-Indent
+	url = https://github.com/vim-scripts/JavaScript-Indent.git
+[submodule "home/vim/bundle/supertab"]
+	path = home/vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git

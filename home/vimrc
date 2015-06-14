@@ -1,0 +1,66 @@
+set nocompatible
+
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+
+" enable syntax highligting
+syntax on
+filetype plugin indent on
+
+color smyck
+
+" show line numbers
+set number
+set ruler
+
+" sometimes i just like to use ümlaüts
+set encoding=utf-8
+
+" tabs or space are equal but only morons use tabs
+set nowrap
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set expandtab
+
+" Makefiles are excluded
+au FileType make set noexpandtab
+
+" show tabs and trailing spaces
+set list listchars=tab:»·,trail:·
+
+" allow backspaces over everything
+set backspace=indent,eol,start
+
+" strip trailing whitespace on save
+fun! <SID>StripTrailingWhitespaces()
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" search stuff
+set incsearch
+set hlsearch
+
+set nofoldenable
+
+set backupdir=~/.vimbackup
+set directory=~/.vimbackup
+
+" nerd tree config
+let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
+map <Leader>n :NERDTreeToggle<CR>
+
+" some config files use Ruby syntax
+au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,config.ru} set ft=ruby
+
+" JSON syntax highlighting
+au BufNewFile,BufRead *.json set ft=javascript
+
+" Python style
+au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
+
+
