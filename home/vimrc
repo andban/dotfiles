@@ -63,4 +63,5 @@ au BufNewFile,BufRead *.json set ft=javascript
 " Python style
 au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
 
-
+" C style
+au FileType {c,cpp} set softtabstop=4 tabstop=4 shiftwidth=4
