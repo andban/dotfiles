@@ -25,3 +25,6 @@
 [submodule "home/vim/bundle/supertab"]
 	path = home/vim/bundle/supertab
 	url = https://github.com/ervandew/supertab.git
+[submodule "home/vim/bundle/vim-jsx"]
+	path = home/vim/bundle/vim-jsx
+	url = https://github.com/mxw/vim-jsx.git
