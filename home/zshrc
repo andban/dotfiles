@@ -4,6 +4,7 @@ fpath=($ZSH_HOME/lib $fpath)
 autoload -U promptinit && promptinit
 prompt pure
 
+
 # do not beep
 setopt no_beep
 
@@ -16,3 +17,5 @@ export CLICOLOR=1
 for f in $ZSH_HOME/lib/*.zsh; do
     source $f
 done
+
+
