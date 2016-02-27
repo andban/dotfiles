@@ -122,3 +122,58 @@ if [[ $OS_FLAVOR == "Arch" ]]; then
 
     alias pacs='pacman -Ss'
 fi
+
+# Docker
+######################################################################
+dc-exec() {
+  local arg
+  if [ "$#" -gt 1 ]; then
+    arg="${@:2}"
+  else
+    arg="bash"
+  fi
+
+  docker exec -it "${PWD##*/}_$1_1" $arg
+}
+
+dm-env() {
+  eval $(docker-machine env $1)
+}
+
+dnsmasq-restart(){
+  echo "Restarting dnsmasq..."
+  sudo launchctl stop homebrew.mxcl.dnsmasq
+  sudo launchctl start homebrew.mxcl.dnsmasq
+}
+
+dm-dns() {
+  local dmip=$(docker-machine ip $1)
+  local dnsconf=/usr/local/etc/dnsmasq.conf
+  if [ ! -e /etc/resolver/$1 ]; then
+    echo "adding $1 entry to resolvers"
+    sudo tee /etc/resolver/$1 >/dev/null <<EOF
+nameserver 127.0.0.1
+EOF
+  fi
+
+  if grep -q /$1/$dmip $dnsconf; then
+    echo "correct dnsmasq entry already exists"
+  elif grep -q ^address=/$1/ $dnsconf; then
+    echo "hostname $1 already present in dnsmasq - updating"
+    sed -i '' -E "\%^address=/[[:alnum:]_.-]+/$dmip%d" $dnsconf
+    sed -i '' -E "s%^(address=/$1)/([[:digit:].]+)$%\1/$dmip%g" $dnsconf
+    dnsmasq-restart
+  else
+    echo "adding $1/$dmip entry to dnsmasq"
+    echo "address=/$1/$dmip" >> /usr/local/etc/dnsmasq.conf
+    dnsmasq-restart
+  fi
+}
+
+dm-start() {
+  docker-machine start $1
+  dm-dns $1
+  dm-env $1
+}
+
+

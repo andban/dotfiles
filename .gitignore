@@ -5,3 +5,6 @@ home/emacs.d/projectile*
 home/emacs.d/tmp
 home/emacs.d/ac-comphist.dat
 home/emacs.d/ido.last
+home/zsh/cache
+home/vim/.netrwhist
+

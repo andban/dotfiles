@@ -150,4 +150,4 @@ setup_sublime() {
 
 setup_dotfiles
 setup_homebrew
-setup_sublime
+#setup_sublime
