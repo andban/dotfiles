@@ -1,3 +1,0 @@
-# name: use
-# --
-(:use [${:namespace} :only [$0]])
