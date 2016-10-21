@@ -141,5 +141,14 @@ setup_homebrew() {
     fi
 }
 
+setup_terminal() {
+    if is_osx; then
+      info "setting up terminal theme..."
+      open terminal/Smyk.terminal
+    fi
+}
+
 setup_dotfiles
 setup_homebrew
+setup_terminal
+
