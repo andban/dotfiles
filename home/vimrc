@@ -59,6 +59,8 @@ au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,config.ru} set ft=ruby
 
 " JSON syntax highlighting
 au BufNewFile,BufRead *.json set ft=javascript
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_flow = 1
 
 " Python style
 au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
