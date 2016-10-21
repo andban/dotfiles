@@ -136,18 +136,10 @@ setup_dotfiles() {
 
 setup_homebrew() {
     if is_osx; then
-	   info "setting up homebrew..."
-	   source script/setup_homebrew
-    fi
-}
-
-setup_sublime() {
-    if is_osx || is_windows ; then
-	   info "setting up sublime..."
-	   source script/setup_sublime
+        info "setting up homebrew..."
+        source script/setup_homebrew
     fi
 }
 
 setup_dotfiles
 setup_homebrew
-#setup_sublime
