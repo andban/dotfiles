@@ -1,2 +1,23 @@
+# misc
 *~
+\#*\#
+
+# OS clutter
 .DS_Store
+.cache
+Icon?
+Thumbs.db
+.Spotlight-V100
+.Trashes
+Desktop.ini
+
+# node.js
+/node_modules
+/npm-debug.log
+
+# emacs
+*.elc
+
+# python
+*.pyc
+
