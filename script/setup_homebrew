@@ -6,16 +6,28 @@ fi
 
 brew update
 
-#brew install clib gnupg2 gpg-agent keybase lua luarocks node zsh-completions
-#brew install --cocoa -srgb emacs
+brew install \
+    autoenv \
+    cmake \
+    dnsmasq \
+    flow \
+    gnupg2 \
+    hostmux \
+    keybase \
+    maven \
+    nvm \
+    ssh-copy-id \
+    tmux
+    zsh-completions
 
-#if ! [ -d /opt/homebrew-cask ]; then
-#  brew install caskroom/cask/brew-cask
-#  brew tap caskroom/versions
-#fi
 
-#brew cask install google-chrome
-#brew cask install coconutbattery
+brew cask install google-chrome \
+    coconutbattery \
+    macvim \
+    robomongo \
+    sequel-pro \
+    spectacle \
+    the-unarchiver
 #brew cask install sublime-text3
 #brew cask install carbon-copy-cloner
 #brew cask install instacast
