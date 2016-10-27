@@ -1,9 +1,10 @@
 set nocompatible
 
+" initialize package management
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
-" enable syntax highligting
+" enable syntax highlighting
 syntax on
 filetype plugin indent on
 
@@ -13,10 +14,10 @@ color smyck
 set number
 set ruler
 
-" sometimes i just like to use ümlaüts
+" sometimes i just like to use ümläuts
 set encoding=utf-8
 
-" tabs or space are equal but only morons use tabs
+" objectively tabs and spaces are both fine, but only morons use tabs
 set nowrap
 set tabstop=2
 set shiftwidth=2
@@ -67,3 +68,15 @@ au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
 
 " C style
 au FileType {c,cpp} set softtabstop=4 tabstop=4 shiftwidth=4
+
+" show changes to file on disk
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
+
+
