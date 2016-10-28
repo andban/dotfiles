@@ -12,14 +12,14 @@ brew install \
     dnsmasq \
     flow \
     gnupg2 \
-    hostmux \
+    hukl/tap/hostmux \
     keybase \
     maven \
     mplayer \
     nvm \
     sox \
     ssh-copy-id \
-    tmux
+    tmux \
     zsh-completions
 
 

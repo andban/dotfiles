@@ -144,7 +144,7 @@ setup_homebrew() {
 setup_terminal() {
     if is_osx; then
       info "setting up terminal theme..."
-      open terminal/Smyk.terminal
+      open terminal/Smyck.terminal
     fi
 }
 
