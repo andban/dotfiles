@@ -15,7 +15,9 @@ brew install \
     hostmux \
     keybase \
     maven \
+    mplayer \
     nvm \
+    sox \
     ssh-copy-id \
     tmux
     zsh-completions

@@ -74,4 +74,7 @@ EOF
   fi
 }
 
-
+function somafm() {
+  local station="$1"
+  mplayer -playlist "http://somafm.com/${station}.pls"
+}

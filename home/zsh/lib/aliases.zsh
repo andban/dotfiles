@@ -176,4 +176,5 @@ dm-start() {
   dm-env $1
 }
 
-
+alias ocean='play -c 2 -n synth pinknoise band -n 2500 4000 tremolo 0.03 5 reverb 20 gain'
+alias enterprise='play -c2 -n synth whitenoise band -n 100 24 band -n 300 100 gain +20'
