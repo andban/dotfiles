@@ -28,3 +28,9 @@
 [submodule "home/vim/bundle/vim-flow"]
 	path = home/vim/bundle/vim-flow
 	url = https://github.com/flowtype/vim-flow.git
+[submodule "home/vim/bundle/YouCompleteMe"]
+	path = home/vim/bundle/YouCompleteMe
+	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "home/vim/bundle/tern_for_vim"]
+	path = home/vim/bundle/tern_for_vim
+	url = https://github.com/ternjs/tern_for_vim.git
