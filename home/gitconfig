@@ -2,12 +2,43 @@
   name = Andreas Bannach
   email = andreas@borntohula.de
 
-[github]
-  user = andban
-
 [core]
   editor = vim
   excludesfile = /Users/andreas/.gitignore_global
+
+[alias]
+  # remove tracking of references removed on remote
+  prune = fetch --prune
+
+  # reset last commit
+  undo = reset --soft HEAD^
+
+  # stash ALL changes
+  stash-all = stash save --include-untracked
+
+[merge]
+  # only allow fast-forward merges (those without merge commit)
+  ff = only
+
+  # show common ancestors in conflict
+  conflictstyle = diff3
+
+[push]
+  default = simple
+  followTags = true
+
+[log]
+  # show only mgmt version
+  abbrevCommit = true
+
+[format]
+  # make it pretty
+  pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
+  graph = true
+
+[status]
+  # show contents of untracked folders
+  showUntrackedFiles = all
 
 [color]
   ui = true
@@ -28,18 +59,20 @@
   changed = green
   untracked = cyan
 
-[push]
-  default = current
+[diff]
+  tool = icdiff
 
-[log]
-  abbrevCommit = true
+[difftool]
+  prompt = false
 
-[format]
-  pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
-  graph = true
+[difftool "icdiff"]
+  cmd = icdiff --line-numbers $LOCAL $REMOTE
 
 [advice]
   statusHints = false
+
+[github]
+  user = andban
 
 [url "git@github.com:"]
   insteadOf = "gh://"
@@ -49,9 +82,5 @@
 #[alias]
 #        squash = !sh "$HOME/.git-extras/git-squash.sh"
 #        changelog = !sh "$HOME/.git-extras/git-changelog.sh"
-[difftool "sourcetree"]
-  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-  path =
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
+
+
