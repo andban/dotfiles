@@ -65,6 +65,19 @@ fi
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE="$HOME/.pip/cache"
 
+
+###
+# decide which one...
+
+# setup autoenv
+source $(brew --prefix autoenv)/activate.sh
+
+# setup direnv
+eval "$(direnv hook zsh)"
+
+#
+###
+
 # load local environment
 if [ -f "$HOME/.zshenv-private" ]; then
   source "$HOME/.zshenv-private" ]
