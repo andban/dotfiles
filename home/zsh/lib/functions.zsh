@@ -78,3 +78,14 @@ function somafm() {
   local station="$1"
   mplayer -playlist "http://somafm.com/${station}.pls"
 }
+
+function dradio() {
+  local station=
+  case "$1" in
+    "nova")   station="deutschlandfunknova" ;;
+    "kultur") station="dkultur" ;;
+    "dlf")    ;&
+    *)        station="dlf" ;;
+  esac
+  mplayer -playlist "http://www.dradio.de/streaming/${station}.m3u"
+}
