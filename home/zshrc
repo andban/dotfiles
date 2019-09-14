@@ -1,9 +1,10 @@
 export ZSH_HOME=~/.zsh
 fpath=($ZSH_HOME/lib $fpath)
+fpath+=("$ZSH_HOME/pure")
 
-autoload -U promptinit && promptinit
+autoload -U promptinit; promptinit
 prompt pure
-
+source $ZSH_HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # do not beep
 setopt no_beep
@@ -19,3 +20,5 @@ for f in $ZSH_HOME/lib/*.zsh; do
 done
 
 
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -89,3 +89,8 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
   exec 2>&3 3>&-
 fi
 
+export GOPATH="$HOME/.go"
+export GO111MODULE=on
+export PATH="$PATH:$GOPATH/bin"
+
+

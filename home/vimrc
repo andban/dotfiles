@@ -1,82 +1,230 @@
+"plugins
+call plug#begin('~/.vim/plugins')
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'aonemd/kuroi.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-fugitive'
+Plug 'machakann/vim-sandwich'
+"Plug 'lifepillar/vim-mucomplete'
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'stephpy/vim-yaml'
+Plug 'cespare/vim-toml'
+Plug 'elzr/vim-json'
+Plug 'plasticboy/vim-markdown'
+Plug 'mxw/vim-jsx'
+Plug 'pangloss/vim-javascript'
+Plug 'fatih/vim-go'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+call plug#end()
+
 set nocompatible
-
-" initialize package management
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
-
-" enable syntax highlighting
-syntax on
+filetype off
 filetype plugin indent on
 
-color smyck
 
-" show line numbers
-set number
-set ruler
+set noerrorbells                    " don't beep me bro
+set number                          " display line numbers
+set backspace=indent,eol,start      " this backspace is made for deleting, and i'm deleting all over you
+set showcmd                         " display incomplete commans
+set showmode                        " display current mode
+set laststatus=2                    " always show status line
+set statusline=%=%m\ %l:%c\ %P\ %f  " [$modified] $line:$column $rel_pos $filename
 
-" sometimes i just like to use ümläuts
-set encoding=utf-8
+set lazyredraw                      " lazy redraw while executing commands
+set ttyfast                         " send more data to terminal for fast redrawing
 
-" objectively tabs and spaces are both fine, but only morons use tabs
-set nowrap
+set noswapfile                      " disable swap files
+set nobackup                        " don't litter
+set autoread                        " auto-reload external file changes
+set autowrite                       " auto-save files when needed
+set encoding=utf-8                  " enable funky characters
+set hidden                          " hide buffers not closing them (allows to open new files without saving the current)
+au FocusLost * :wa                  " auto-save when focus lost (GUI)
+
+"more verbose menu in command mode
+set wildmenu
+set wildmode=longest:full,full
+
+"set colorcolumn=79                 " show line width
+"set textwidth=79
+set nowrap                          " don't wrap lines
+
+set cursorline                      " higlight current line
+set nocursorcolumn
+set ruler                           " show cursor position
+syntax sync minlines=256            " sync syntax highlighting window (faster)
+set synmaxcol=300
+set re=0                            " use old regex engine (faster)
+
+" don't highlight current line in unfocused windows
+au VimEnter,WinEnter,BufWinEnter,FocusGained,CmdwinEnter * set cul
+au WinLeave,FocusLost,CmdwinLeave * set nocul
+
+
+"split at bottom or right side
+set splitbelow
+set splitright
+
+"enable autoindent
+set autoindent
+set complete-=i                     " exclude filenames in auto-complete
+set complete=.,w,b,u,t
+set completeopt=longest,menuone
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+set showmatch                       " show matching brackets
+set smarttab                        " smarter tab handling
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
+set shiftround                      " indent to next tabstop
+"disable auto comments on new lines
+set formatoptions-=cro
 
-" Makefiles are excluded
-au FileType make set noexpandtab
 
-" show tabs and trailing spaces
-set list listchars=tab:»·,trail:·
+set notimeout
+set ttimeout
+set ttimeoutlen=10
 
-" allow backspaces over everything
-set backspace=indent,eol,start
 
-" strip trailing whitespace on save
-fun! <SID>StripTrailingWhitespaces()
-  let l = line(".")
-  let c = col(".")
-  %s/\s\+$//e
-  call cursor(l, c)
-endfun
-autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+"set leader key to space
+let mapleader = "\<Space>"
 
-" search stuff
+
+"
+" UI
+"
+
+"use 256 colors
+set t_Co=256
+
+"set colorscheme (https://github.com/aonemd/kuroi.vim)
+set background=dark
+colorscheme kuroi
+
+set guifont=Source\ Code\ Pro\ 15
+set guioptions-=L
+
+
+syntax enable
+if has('gui_running')
+  set regexpengine=1
+  syntax enable
+endif
+
+
+"
+"
+"
+
+"prune trailing whitespace on write
+"autocmd! BufWritePre * :%s/\s\+$//e
+
+"
+"
+"
+
+"save buffer
+nnoremap <leader>w :w<cr>
+
+"replace word
+nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
+
+"sudo write this god damn file
+cnoremap w!! %!sudo tee > /dev/null %
+
+"turn off search highligts
+nmap <leader>q :nohlsearch<cr>
+
+"move lines
+nnoremap <leader>k :m-2<cr>==
+nnoremap <leader>j :m+<cr>==
+xnoremap <leader>k :m-2<cr>gv=gv
+xnoremap <leader>j :m'>+<cr>gv+gv
+
+"keep selection after indent
+vnoremap < <gv
+vnoremap > >gv
+
+"cycle through buffers
+nnoremap <Tab> :bnext<cr>
+nnoremap <S-Tab> :bprevious<cr>
+
+
+"
+" search
+"
+
+"enable incremental search
 set incsearch
+
+"enable search highlight
 set hlsearch
 
-set nofoldenable
+"default case insensitive, switch to sensitive when first uppercase letter entered
+set ignorecase
+set smartcase
 
-set backupdir=~/.vimbackup
-set directory=~/.vimbackup
+"fzf
+nnoremap <leader>p :FZF<cr>
+nnoremap <leader>o :Lines<cr>
+nnoremap <leader>t :Tags<cr>
+nnoremap <leader>r :Buffers<cr>
 
-" nerd tree config
-let NERDTreeIgnore=['\.pyc$', '\.rbc$', '\~$']
-map <Leader>n :NERDTreeToggle<CR>
+"
+" Ctags
+"
+set tags+=.git/tags
+nnoremap <leader>ct :!ctags -Rf .git/tags --tag-relative --extra=+f --exclude={.git,build,dist,node_modules,pkg} --languages=-sql<cr><cr>
 
-" some config files use Ruby syntax
-au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,config.ru} set ft=ruby
+"
+" Fugitive
+"
+nnoremap <leader>ga :Git add %:p<CR><CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gp :Gpush<CR>
+nnoremap <leader>gb :Gblame<CR>
 
-" JSON syntax highlighting
-au BufNewFile,BufRead *.json set ft=javascript
-let g:javascript_plugin_jsdoc = 1
-" let g:javascript_plugin_flow = 1
+"
+" GitGutter
+"
 
-" Python style
-au FileType python set softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79
+nnoremap <c-N> :GitGutterNextHunk<cr>
+nnoremap <c-P> :GitGutterPrevHunk<cr>
+nnoremap <c-U> :GitGutterUndoHunk<cr>
 
-" C style
-au FileType {c,cpp} set softtabstop=4 tabstop=4 shiftwidth=4
+"
+" MUComplete
+"
+"set completeopt+=menuone
+"set completeopt+=noselect
 
-" show changes to file on disk
-function! s:DiffWithSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-endfunction
-com! DiffSaved call s:DiffWithSaved()
+"no message of bleep
+set shortmess+=c
+set belloff+=ctrlg
+let g:mucomplete#enable_auto_at_startup=1
 
+"
+" NERDTree
+"
+
+nmap <C-n> :NERDTreeToggle<CR>          " toggle file explorer
+noremap <Leader>n :NERDTreeToggle<CR>
+noremap <Leader>f :NERDTreeFind<CR>     " navigate to file of current buffer
+
+
+"
+" JavaScript
+"
+let g:vim_json_syntax_conceal = 1
+
+"enable omni complete for javascript
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 

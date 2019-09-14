@@ -1,9 +1,14 @@
+if [ -x "/usr/share/zsh/vendor-completions" ]; then
+    fpath=(/usr/share/zsh/vendor-completions $fpath)
+fi
+
 if [ -x "/usr/local/share/zsh-completions" ]; then
     fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
+
 # init auto completion
-autoload -U compinit
+autoload -Uz compinit
 compinit -i
 
 
