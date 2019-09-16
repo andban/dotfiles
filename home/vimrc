@@ -1,15 +1,16 @@
 "plugins
 call plug#begin('~/.vim/plugins')
+Plug 'aonemd/kuroi.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'aonemd/kuroi.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-fugitive'
+Plug 'Raimondi/delimitMate'
 Plug 'machakann/vim-sandwich'
-"Plug 'lifepillar/vim-mucomplete'
+Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'stephpy/vim-yaml'
 Plug 'cespare/vim-toml'
 Plug 'elzr/vim-json'
@@ -17,14 +18,11 @@ Plug 'plasticboy/vim-markdown'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'fatih/vim-go'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 call plug#end()
 
 set nocompatible
 filetype off
 filetype plugin indent on
-
 
 set noerrorbells                    " don't beep me bro
 set number                          " display line numbers
@@ -78,6 +76,18 @@ inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+set wildmenu
+set wildmode=list:full
+set wildignore+=.hg,.git,.svn
+set wildignore+=*.aux,*.out,*.toc
+set wildignore+=*.jpe?g,*.bmp,*.gif,*.png
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.class,*.so,*.a
+set wildignore+=*.spl
+set wildignore+=*.sw?
+set wildignore+=*.DS_Store
+set wildignore+=go/pkg,go/bin
+set wildignore+=.pyc
+
 set showmatch                       " show matching brackets
 set smarttab                        " smarter tab handling
 set tabstop=2
@@ -85,17 +95,18 @@ set shiftwidth=2
 set softtabstop=2
 set expandtab
 set shiftround                      " indent to next tabstop
-"disable auto comments on new lines
-set formatoptions-=cro
+set formatoptions-=cro              "disable auto comments on new lines
 
+" don't expand tabs in makefiles
+au FileType make set noexpandtab
 
 set notimeout
 set ttimeout
 set ttimeoutlen=10
 
-
 "set leader key to space
 let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
 
 
 "
@@ -109,9 +120,19 @@ set t_Co=256
 set background=dark
 colorscheme kuroi
 
-set guifont=Source\ Code\ Pro\ 15
+set guifont=Consolas:h15
 set guioptions-=L
 
+" if we have a mouse why not flaunt it
+if has('mouse')
+  set mouse=a
+endif
+
+" on linux we use ttymouse
+let s:uname = system("echo -n \"$(uname)\"")
+if !v:shell_error && s:uname == "Linux" && !has('nvim')
+  set ttymouse=xterm
+endif
 
 syntax enable
 if has('gui_running')
@@ -119,13 +140,11 @@ if has('gui_running')
   syntax enable
 endif
 
+" diff current buffer with contents on disk
+if !exists(":DiffSaved")
+  command DiffSaved vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+endif
 
-"
-"
-"
-
-"prune trailing whitespace on write
-"autocmd! BufWritePre * :%s/\s\+$//e
 
 "
 "
@@ -137,25 +156,45 @@ nnoremap <leader>w :w<cr>
 "replace word
 nnoremap <leader>* :%s/\<<c-r><c-w>\>//g<left><left>
 
-"sudo write this god damn file
+"sudo carve-those-god-damn-bits-into-disk
 cnoremap w!! %!sudo tee > /dev/null %
 
-"turn off search highligts
-nmap <leader>q :nohlsearch<cr>
+" move selection around
+nnoremap <silent> <leader>k :m-2<cr>==
+nnoremap <silent> <leader>j :m+<cr>==
+xnoremap <silent> <leader>k :m-2<cr>gv=gv
+xnoremap <silent> <leader>j :m'>+<cr>gv+gv
 
-"move lines
-nnoremap <leader>k :m-2<cr>==
-nnoremap <leader>j :m+<cr>==
-xnoremap <leader>k :m-2<cr>gv=gv
-xnoremap <leader>j :m'>+<cr>gv+gv
-
-"keep selection after indent
+" keep selection after indent
 vnoremap < <gv
 vnoremap > >gv
 
-"cycle through buffers
+" cycle through buffers
 nnoremap <Tab> :bnext<cr>
 nnoremap <S-Tab> :bprevious<cr>
+
+" quickfix helpers
+autocmd FileType qf wincmd J        " alway push quickfix window to the bottom
+map <C-n> :cn<CR>                   " next error
+map <C-m> :cp<CR>                   " previous error
+nnoremap <leader>a :cclose<CR>      " close quickfix window
+
+map <C-j> <C-W>j                    " switch to top window
+map <C-k> <C-W>k                    " switch to bottom window
+map <C-h> <C-W>h                    " switch to left window
+map <C-l> <C-W>l                    " switch to right window
+
+" toggle spell check
+nnoremap <F6> :setlocal spell! spell?<CR>
+
+" switch to directory of active buffer
+autocmd BufEnter * silent! lcd %:p:h
+
+"prune trailing whitespace on write
+"autocmd! BufWritePre * :%s/\s\+$//e
+
+" happens all the time and what happens than makes me sad
+map q: :q
 
 
 "
@@ -168,6 +207,9 @@ set incsearch
 "enable search highlight
 set hlsearch
 
+"turn off search highligts
+nmap <leader>q :nohlsearch<cr>
+
 "default case insensitive, switch to sensitive when first uppercase letter entered
 set ignorecase
 set smartcase
@@ -178,53 +220,81 @@ nnoremap <leader>o :Lines<cr>
 nnoremap <leader>t :Tags<cr>
 nnoremap <leader>r :Buffers<cr>
 
+" jump to search matches and center screen
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
 "
 " Ctags
 "
 set tags+=.git/tags
 nnoremap <leader>ct :!ctags -Rf .git/tags --tag-relative --extra=+f --exclude={.git,build,dist,node_modules,pkg} --languages=-sql<cr><cr>
 
+
 "
+" Git
+"
+
 " Fugitive
-"
 nnoremap <leader>ga :Git add %:p<CR><CR>
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gp :Gpush<CR>
 nnoremap <leader>gb :Gblame<CR>
 
-"
-" GitGutter
-"
 
+" GitGutter
 nnoremap <c-N> :GitGutterNextHunk<cr>
 nnoremap <c-P> :GitGutterPrevHunk<cr>
 nnoremap <c-U> :GitGutterUndoHunk<cr>
 
-"
-" MUComplete
-"
-"set completeopt+=menuone
-"set completeopt+=noselect
+autocmd FileType gitcommit setlocal spell
 
-"no message of bleep
-set shortmess+=c
-set belloff+=ctrlg
-let g:mucomplete#enable_auto_at_startup=1
 
 "
 " NERDTree
 "
 
-nmap <C-n> :NERDTreeToggle<CR>          " toggle file explorer
 noremap <Leader>n :NERDTreeToggle<CR>
 noremap <Leader>f :NERDTreeFind<CR>     " navigate to file of current buffer
+
+let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\~$', '\.git$', '.DS_Store']
+
+autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTreeType') && b:NERDTreeType == 'primary') | q | endif
 
 
 "
 " JavaScript
 "
-let g:vim_json_syntax_conceal = 1
 
-"enable omni complete for javascript
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+let g:vim_json_syntax_conceal = 0
+au BufNewFile,BufRead *.json,*.js,*.jsx,*.mjs setlocal expandtab noet ts=2 sw=2 sts=2
+
+
+"
+" C/C++
+"
+
+au BufNewFile,BufRead *.c,*.cpp,*.cc,*.h,*.hpp setlocal expandtab ts=4 sw=4 sts=4
+
+"
+" Go
+"
+
+au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
+
+"
+" Dockerfile
+"
+
+autocmd FileType dockerfile set noexpandtab
+
+
+"
+" vim-better-whitespace
+"
+
+let blacklist = ['make', 'diff', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
+autocmd BufWritePre * if index(blacklist, &ft) < 0 | StripWhitespace
 

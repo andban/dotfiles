@@ -8,7 +8,7 @@ install_dotfiles:
 		dst=$(HOME)/.$$(basename "$$src"); \
 		ln -snf "$$src" "$$dst"; \
 	done;
-
+	
 	ln -snf "$(CURDIR)/home/Xresources" "$(HOME)/.Xdefaults"
 	xrdb -merge $(HOME)/.Xdefaults || true
 	xrdb -merge $(HOME)/.Xresources || true
