@@ -66,6 +66,12 @@ EOF
     rm /tmp/openssl.cnf
 }
 
+# ssh-agent on demand
+if which ssh-ident > /dev/null; then
+  alias ssh=ssh-ident
+fi
+
+
 # GIT
 #######################################################################
 
@@ -176,5 +182,13 @@ dm-start() {
   dm-env $1
 }
 
+alias doco='docker-compose'
+alias doco-rc='docker-compose up -d --force-recreate --no-deps'
+alias doco-rcb='docker-compose up -d --force-recreate --no-deps --build'
+
+
+#
+# Random stuff
+##############################################################################
 alias ocean='play -c 2 -n synth pinknoise band -n 2500 4000 tremolo 0.03 5 reverb 20 gain'
 alias enterprise='play -c2 -n synth whitenoise band -n 100 24 band -n 300 100 gain +20'

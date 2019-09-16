@@ -12,15 +12,13 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
   setopt xtrace prompt_subst
 fi
 
-
-
 # use path_helper and /etc/paths.d on MacOS X
 if [ -x /usr/libexec/path_helper ]; then
     PATH=''
     eval `/usr/libexec/path_helper -s`
 fi
 
-export PATH="/usr/local/sbin:$PATH"
+export PATH="$HOME/.bin:/usr/local/sbin:$PATH"
 
 # gather info about the system
 export OS_FAMILY=$(uname -s)
