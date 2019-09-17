@@ -3,6 +3,7 @@ call plug#begin('~/.vim/plugins')
 Plug 'aonemd/kuroi.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara'}
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'Raimondi/delimitMate'
@@ -20,13 +21,19 @@ Plug 'pangloss/vim-javascript'
 Plug 'fatih/vim-go'
 call plug#end()
 
+" don't show intro message
+set shortmess=aI
+
 set nocompatible
 filetype off
 filetype plugin indent on
 
 set noerrorbells                    " don't beep me bro
 set number                          " display line numbers
-set backspace=indent,eol,start      " this backspace is made for deleting, and i'm deleting all over you
+set backspace=indent,eol,start      " this backspace is made for deleting,
+                                    " and that's just what it'll do
+                                    " and it'll deleting all over you
+
 set showcmd                         " display incomplete commans
 set showmode                        " display current mode
 set laststatus=2                    " always show status line
@@ -35,6 +42,19 @@ set statusline=%=%m\ %l:%c\ %P\ %f  " [$modified] $line:$column $rel_pos $filena
 set lazyredraw                      " lazy redraw while executing commands
 set ttyfast                         " send more data to terminal for fast redrawing
 
+" show list of possible matches when editing commands and exclude clutter when
+" completing filenames
+set wildmenu
+set wildmode=list:full
+set wildignore+=.hg,.git,.svn
+set wildignore+=*.aux,*.out,*.toc
+set wildignore+=*.jpeg,*.jpg,*.bmp,*.gif,*.png
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.class,*.so,*.a
+set wildignore+=*.spl
+set wildignore+=*.sw?
+set wildignore+=*.DS_Store
+set wildignore+=.pyc
+
 set noswapfile                      " disable swap files
 set nobackup                        " don't litter
 set autoread                        " auto-reload external file changes
@@ -42,10 +62,6 @@ set autowrite                       " auto-save files when needed
 set encoding=utf-8                  " enable funky characters
 set hidden                          " hide buffers not closing them (allows to open new files without saving the current)
 au FocusLost * :wa                  " auto-save when focus lost (GUI)
-
-"more verbose menu in command mode
-set wildmenu
-set wildmode=longest:full,full
 
 "set colorcolumn=79                 " show line width
 "set textwidth=79
@@ -75,18 +91,6 @@ set completeopt=longest,menuone
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-set wildmenu
-set wildmode=list:full
-set wildignore+=.hg,.git,.svn
-set wildignore+=*.aux,*.out,*.toc
-set wildignore+=*.jpe?g,*.bmp,*.gif,*.png
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest,*.class,*.so,*.a
-set wildignore+=*.spl
-set wildignore+=*.sw?
-set wildignore+=*.DS_Store
-set wildignore+=go/pkg,go/bin
-set wildignore+=.pyc
 
 set showmatch                       " show matching brackets
 set smarttab                        " smarter tab handling
@@ -120,8 +124,8 @@ set t_Co=256
 set background=dark
 colorscheme kuroi
 
-set guifont=Consolas:h15
-set guioptions-=L
+set guifont=Consolas:h16
+set guioptions-=LT
 
 " if we have a mouse why not flaunt it
 if has('mouse')
@@ -196,6 +200,8 @@ autocmd BufEnter * silent! lcd %:p:h
 " happens all the time and what happens than makes me sad
 map q: :q
 
+" smart quit
+nnoremap <silent> <leader>q :Sayonara<CR>
 
 "
 " search
@@ -208,7 +214,7 @@ set incsearch
 set hlsearch
 
 "turn off search highligts
-nmap <leader>q :nohlsearch<cr>
+nmap <leader><space> :nohlsearch<cr>
 
 "default case insensitive, switch to sensitive when first uppercase letter entered
 set ignorecase
