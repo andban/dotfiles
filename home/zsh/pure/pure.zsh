@@ -311,7 +311,7 @@ prompt_pure_async_git_fetch() {
 		fi
 	' CHLD
 
-	command git -c gc.auto=0 fetch >/dev/null &
+  command git -c gc.auto=0 $(git for-each-ref --format='%(upstream:remotename) %(refname)' $(git symbolic-ref -q HEAD)) >/dev/null &
 	wait $! || return $fail_code
 
 	unsetopt monitor
