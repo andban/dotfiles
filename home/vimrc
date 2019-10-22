@@ -61,6 +61,7 @@ set nobackup                        " don't litter
 set autoread                        " auto-reload external file changes
 set autowrite                       " auto-save files when needed
 set encoding=utf-8                  " enable funky characters
+set fileencoding=utf-8
 set hidden                          " hide buffers not closing them (allows to open new files without saving the current)
 au FocusLost * :wa                  " auto-save when focus lost (GUI)
 
