@@ -19,6 +19,7 @@ Plug 'plasticboy/vim-markdown'
 Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'fatih/vim-go'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 " don't show intro message
