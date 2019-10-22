@@ -186,6 +186,10 @@ alias doco='docker-compose'
 alias doco-rc='docker-compose up -d --force-recreate --no-deps'
 alias doco-rcb='docker-compose up -d --force-recreate --no-deps --build'
 
+alias d='docker'
+alias dps='docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"'
+
+alias dterm='docker run -it --rm --privileged --pid=host justincormack/nsenter1'
 
 #
 # Random stuff
