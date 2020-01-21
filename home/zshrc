@@ -19,10 +19,13 @@ setopt HIST_IGNORE_SPACE
 # load fzf when present
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# load local environment
+if [ -f "$HOME/.zshrc-private" ]; then
+  source "$HOME/.zshrc-private" ]
+fi
+
 # load config files
 for f in $ZSH_HOME/lib/*.zsh; do
     source $f
 done
-
-
 
