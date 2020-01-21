@@ -277,7 +277,7 @@ autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTreeType') && b:NERDTree
 "
 
 let g:vim_json_syntax_conceal = 0
-au BufNewFile,BufRead *.json,*.js,*.jsx,*.mjs setlocal expandtab noet ts=2 sw=2 sts=2
+au BufNewFile,BufRead *.json,*.js,*.jsx,*.mjs setlocal expandtab ts=2 sw=2 sts=2
 
 
 "
@@ -296,7 +296,7 @@ au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
 " Dockerfile
 "
 
-autocmd FileType dockerfile set noexpandtab
+autocmd FileType dockerfile setlocal expandtab ts=4 sw=4 sts=4
 
 
 "
