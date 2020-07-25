@@ -16,6 +16,8 @@ export CLICOLOR=1
 
 setopt HIST_IGNORE_SPACE
 
+export GPG_TTY=$(tty)
+
 # load fzf when present
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

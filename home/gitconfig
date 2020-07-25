@@ -3,17 +3,37 @@
 
 [user "github"]
 	name = Andreas Bannach
-	email = github@borntohula.de
-	signingkey = 80C795CBB17B29FB
+	email = andreas@borntohula.de
+	signingkey = B1A55CABDA50A2C8
 
 [user "bitbucket"]
   name = Andreas Bannach
   email = andreas@borntohula.de
+  signingkey = B1A55CABDA50A2C8
+
+[gpg]
+  program = gpg
 
 
 [color]
   # use color when supported
   ui = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
 
 
 [core]
@@ -52,6 +72,11 @@
   aliases = "!git config --get-regexp alias |sed -e 's/^alias\\.\\([^[:space:]]*\\)/\\1 =/g'"
 
   log-full = log --graph --pretty=tformat:'%Cred%h%Creset - %Cgreen(%cD) %C(bold blue)%an <%ae>%Creset %n%w(78,2,2)%s %n%w(70,4,4)%b'
+
+
+[commit]
+  gpgsign = true
+
 
 [push]
   # always push local branch into the upstream branch of the same name
@@ -151,20 +176,4 @@ prereleaseSuffix = -beta
 prereleaseSuffix = .beta
 prereleaseSuffix = -rc
 prereleaseSuffix = .rc
-
-[color "branch"]
-  current = yellow reverse
-  local = yellow
-  remote = green
-
-[color "diff"]
-  meta = yellow bold
-  frag = magenta bold
-  old = red bold
-  new = green bold
-
-[color "status"]
-  added = yellow
-  changed = green
-  untracked = cyan
 
