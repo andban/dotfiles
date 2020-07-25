@@ -2,9 +2,9 @@
   useConfigOnly = true
 
 [user "github"]
-	name = Andreas Bannach
-	email = andreas@borntohula.de
-	signingkey = B1A55CABDA50A2C8
+  name = Andreas Bannach
+  email = andreas@borntohula.de
+  signingkey = B1A55CABDA50A2C8
 
 [user "bitbucket"]
   name = Andreas Bannach
@@ -170,10 +170,12 @@
   sort = version:refname
 
 [versionsort]
-prereleaseSuffix = -pre
-prereleaseSuffix = .pre
-prereleaseSuffix = -beta
-prereleaseSuffix = .beta
-prereleaseSuffix = -rc
-prereleaseSuffix = .rc
+  prereleaseSuffix = -pre
+  prereleaseSuffix = .pre
+  prereleaseSuffix = -alpha
+  prereleaseSuffix = .alpha
+  prereleaseSuffix = -beta
+  prereleaseSuffix = .beta
+  prereleaseSuffix = -rc
+  prereleaseSuffix = .rc
 
