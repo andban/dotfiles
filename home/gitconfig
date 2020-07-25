@@ -1,4 +1,12 @@
 [user]
+  useConfigOnly = true
+
+[user "github"]
+	name = Andreas Bannach
+	email = github@borntohula.de
+	signingkey = 80C795CBB17B29FB
+
+[user "bitbucket"]
   name = Andreas Bannach
   email = andreas@borntohula.de
 
@@ -9,8 +17,9 @@
 
 
 [core]
-  # don't page if contents fit on screen
+  # don't page if contents fit on screen (also keeps content on screen if it does)
   pager = less -FX
+
   editor = vim
   excludesfile = ~/.gitignore_global
   whitespace = -trailing-space
@@ -26,6 +35,9 @@
   # stash ALL changes
   stash-all = stash save --include-untracked
 
+  # set identity for current repository
+  identity = "! git config user.name \"$(git config user.$1.name)\"; git config user.email \"$(git config user.$1.email)\"; git config user.signingkey \"$(git config user.$1.signingkey)\"; :"
+
   # show local commits
   local = "!git log @{push}.."
 
@@ -38,10 +50,10 @@
   # show list of all aliases
   aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
 
-
+  log-full = log --graph --pretty=tformat:'%Cred%h%Creset - %Cgreen(%cD) %C(bold blue)%an <%ae>%Creset %n%w(78,2,2)%s %n%w(70,4,4)%b'
 
 [push]
-  #
+  # always push local branch into the upstream branch of the same name
   default = simple
 
   # always push new tags
@@ -49,18 +61,23 @@
 
 
 [pull]
+  # rebase and keep local merge commits
   rebase = merges
 
 
 [log]
   # show only mgmt summary of hashes
   abbrevCommit = true
+
+  # follow single file history across renames
   follow = true
+
+  # don't add any ref names to commits
   decorate = false
 
 
 [format]
-  # make it pretty
+  # make it pretty see (https://git-scm.com/docs/git-log#_pretty_formats)
   pretty = %Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset
   graph = true
 
@@ -149,18 +166,4 @@ prereleaseSuffix = .rc
   added = yellow
   changed = green
   untracked = cyan
-
-
-[github]
-  user = andban
-
-[url "git@github.com:"]
-  insteadOf = "gh://"
-  pushInsteadOf = "gh://"
-  pushInsteadOf = "git://github.com/"
-
-#[alias]
-#        squash = !sh "$HOME/.git-extras/git-squash.sh"
-#        changelog = !sh "$HOME/.git-extras/git-changelog.sh"
-
 
