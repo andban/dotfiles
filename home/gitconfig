@@ -48,7 +48,8 @@
   amend = commit --amend --no-edit
 
   # show list of all aliases
-  aliases = !git config --get-regexp alias | sed -re 's/alias\\.(\\S*)\\s(.*)$/\\1 = \\2/g'
+#  aliases = "!git config --get-regexp alias | sed -e 's/alias\\\.(\\\S*)\\\s(.*)$/\\\1 = \\\2/g'"
+  aliases = "!git config --get-regexp alias |sed -e 's/^alias\\.\\([^[:space:]]*\\)/\\1 =/g'"
 
   log-full = log --graph --pretty=tformat:'%Cred%h%Creset - %Cgreen(%cD) %C(bold blue)%an <%ae>%Creset %n%w(78,2,2)%s %n%w(70,4,4)%b'
 

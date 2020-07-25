@@ -85,6 +85,7 @@ alias gs='git status --short'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gl='git log --no-merges'
+alias glf='git log-full'
 
 function gc() {
     local args=$@
