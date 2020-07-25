@@ -20,6 +20,9 @@ Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'npm install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'yaml', 'html'] }
 call plug#end()
 
 " don't show intro message
@@ -286,6 +289,7 @@ au BufNewFile,BufRead *.json,*.js,*.jsx,*.mjs setlocal expandtab ts=2 sw=2 sts=2
 
 au BufNewFile,BufRead *.c,*.cpp,*.cc,*.h,*.hpp setlocal expandtab ts=4 sw=4 sts=4
 
+
 "
 " Go
 "
@@ -298,6 +302,7 @@ else
   let g:go_loaded_install = !has('patch-8.0.1453')
 endif
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
+autocmd BufWritePre *.go :CocCommand editor.action.organizeImport
 
 "
 " Dockerfile
@@ -312,4 +317,14 @@ autocmd FileType dockerfile setlocal expandtab ts=4 sw=4 sts=4
 
 let blacklist = ['make', 'diff', 'gitcommit', 'unite', 'qf', 'help', 'markdown']
 autocmd BufWritePre * if index(blacklist, &ft) < 0 | StripWhitespace
+
+"
+" vim-prettier
+"
+
+nmap <Leader>py <Plug>(Prettier)
+"let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Prettier
+
 
