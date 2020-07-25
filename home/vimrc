@@ -290,6 +290,13 @@ au BufNewFile,BufRead *.c,*.cpp,*.cc,*.h,*.hpp setlocal expandtab ts=4 sw=4 sts=
 " Go
 "
 
+" sometimes you end up on a machine that has not the latest & greatest version
+" of vim
+if has('nvim')
+  let g:go_loaded_install = !has('nvim-0.4.0')
+else
+  let g:go_loaded_install = !has('patch-8.0.1453')
+endif
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
 
 "
