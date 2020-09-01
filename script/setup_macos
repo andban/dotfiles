@@ -1,0 +1,100 @@
+#!/bin/sh
+
+# MacOS setup script (copied https://mths.be/macos)
+
+# first, close system preferences to avoid conflicting changes
+osascript -e 'tell application "System Preferences" to quit'
+
+# elevate permissions
+sudo -v
+
+# update sudo timestamp until script has finished
+while true; do
+  sudo -n true
+  sleep 60
+  kill -0 "$$" || exit
+done 2>/dev/null &
+
+
+# setup computer name (as done via System Preferences -> Sharing)
+read -p 'Change hostname (leave empty to skip): ' COMPUTER_NAME
+if [ ! -z "$COMPUTER_NAME" ]; then
+  echo "Setting hostname to: ${COMPUTER_NAME}"
+  sudo scutil --set ComputerName "${COMPUTER_NAME}"
+  sudo scutil --set HostName "${COMPUTER_NAME}"
+  sudo scutil --set LocalHostName "${COMPUTER_NAME}"
+  sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "${COMPUTER_NAME}"
+fi
+
+# set default application (clicking on stuff in finder)
+if [ "$(command -v duti)" > /dev/null ]; then
+  duti -s com.apple.Safari afp
+  duti -s com.apple.Safari ftp
+  duti -s com.apple.Safari nfs
+  duti -s com.apple.Safari smb
+  duti -s com.apple.TextEdit public.unix-executable
+fi
+
+# enable firewall & stealth mode
+/usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
+/usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
+pkill -HUP socketfilterfw
+
+# dispable hyperlink beacons in safari
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2HyperlinkAuditingEnabled -bool false
+
+
+# disable boot sound
+#sudo nvram SystemAudioVolume=" "
+
+# set hightlight color to purple
+defaults write NSGlobalDomain AppleHighlightColor -string "0.968627 0.831373 1.000000 Purple"
+defaults write NSGlobalDomain AppleAccentColor -int 5
+
+# Set sidebar icon size to medium
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 1
+
+# Expand save panel by default
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+
+# Expand print panel by default
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+
+# Save to disk (not to iCloud) by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# Automatically quit printer app once the print jobs complete
+defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
+
+# Disable automatic capitalization as it’s annoying when typing code
+defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+# Disable smart dashes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+
+# Disable automatic period substitution as it’s annoying when typing code
+defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
+
+# Disable smart quotes as they’re annoying when typing code
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+
+
+# Trackpad: enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Enable full keyboard access for all controls
+# (e.g. enable Tab in modal dialogs)
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+chflags nohidden ~/Library
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+#defaults write /Library/Preferences/com.apple.mDNSResponder.plist NoMulticastAdvertisements -bool YES
+
