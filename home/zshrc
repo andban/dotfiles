@@ -16,7 +16,11 @@ export CLICOLOR=1
 
 setopt HIST_IGNORE_SPACE
 
-export GPG_TTY=$(tty)
+# this is needed to get git & ssh to work with the GPG key
+if which gpg-connect-agent &> /dev/null; then
+  export GPG_TTY=$(tty)
+  gpg-connect-agent updatestartuptty /bye >/dev/null
+fi
 
 # load fzf when present
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
