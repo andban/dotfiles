@@ -67,9 +67,9 @@ EOF
 }
 
 # ssh-agent on demand
-if which ssh-ident > /dev/null; then
-  alias ssh=ssh-ident
-fi
+#if which ssh-ident > /dev/null; then
+#  alias ssh=ssh-ident
+#fi
 
 
 # GIT
