@@ -47,6 +47,10 @@ export LESS="--ignore-case --raw-control-chars"
 
 export LC_COLLATE=C
 
+# homebrew
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_CASK_OPTS=--require-sha
 
 # setup rbenv, if present
 if which rbenv &> /dev/null; then
