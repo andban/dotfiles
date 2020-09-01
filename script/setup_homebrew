@@ -1,35 +1,31 @@
 #!/usr/bin/env bash
 
-if ! [ $(which brew) ]; then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+if ! [ "$(command -v brew)" ]; then
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 fi
 
 brew update
 
 brew install \
-    autoenv \
     cmake \
+    direnv \
     dnsmasq \
-    flow \
     gnupg2 \
     hukl/tap/hostmux \
-    keybase \
     maven \
-    mplayer \
-    nvm \
-    sox \
+    n \
     ssh-copy-id \
     tmux \
     zsh-completions
 
 
-brew cask install google-chrome \
-    coconutbattery \
-    macvim \
-    robomongo \
-    sequel-pro \
-    spectacle \
-    the-unarchiver
+brew cask install google-chrome
+brew cask install coconutbattery
+brew cask install keybase
+brew cask install macvim --no-binaries
+brew cask install rectangle
+brew cask install the-unarchiver
+
 #brew cask install sublime-text3
 #brew cask install carbon-copy-cloner
 #brew cask install instacast
@@ -37,5 +33,4 @@ brew cask install google-chrome \
 #brew cask install the-unarchiver
 #brew cask install virtualbox
 #brew cask install vagrant
-
 
