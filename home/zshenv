@@ -83,7 +83,6 @@ fi
 ###
 
 if which gpgconf &> /dev/null; then
-  echo "setting up ssh with GPG keys"
   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 fi
 
