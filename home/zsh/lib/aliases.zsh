@@ -27,6 +27,9 @@ alias cls='echo -ne "\033c"'
 alias root='sudo -s'
 
 
+alias gpg2=gpg
+
+
 function h() {
    history 0 | grep --color=always $@ | uniq -f 1
 }
