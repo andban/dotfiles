@@ -1,6 +1,7 @@
 export ZSH_HOME=~/.zsh
 fpath=($ZSH_HOME/lib $fpath)
 fpath+=("$ZSH_HOME/pure")
+fpath+=(~/.zsh/completion)
 
 autoload -U promptinit; promptinit
 prompt pure
