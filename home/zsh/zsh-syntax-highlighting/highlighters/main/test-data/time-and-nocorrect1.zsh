@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2018 zsh-syntax-highlighting contributors
+# Copyright (c) 2019 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,15 +28,12 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-# See also param-precommand-option-argument1.zsh
-alias sudo_u='sudo -u'
-sudo(){}
-
-BUFFER='sudo_u phy1729 echo foo'
+BUFFER=$'time ls; nocorrect ls'
 
 expected_region_highlight=(
-  '1 6 alias' # sudo_u
-  '8 14 default' # phy1729
-  '17 19 command "issue #540"' # echo (not builtin)
-  '21 23 default' # foo
+  '1 4 reserved-word' # time
+  '6 7 command' # ls
+  '8 8 commandseparator' # ;
+  '10 18 reserved-word' # nocorrect
+  '20 21 command' # ls
 )

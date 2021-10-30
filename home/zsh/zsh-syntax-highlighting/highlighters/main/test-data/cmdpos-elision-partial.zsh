@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # -------------------------------------------------------------------------------------------------
-# Copyright (c) 2018 zsh-syntax-highlighting contributors
+# Copyright (c) 2020 zsh-syntax-highlighting contributors
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted
@@ -28,15 +28,17 @@
 # vim: ft=zsh sw=2 ts=2 et
 # -------------------------------------------------------------------------------------------------
 
-# See also param-precommand-option-argument1.zsh
-alias sudo_u='sudo -u'
-sudo(){}
+# Test elision of some, but not all of the words
+# See issue #667 for the case of eliding all words
+local -a x; x=(sudo "")
 
-BUFFER='sudo_u phy1729 echo foo'
+sudo(){}
+BUFFER=$'$x -u phy1729 ls'
 
 expected_region_highlight=(
-  '1 6 alias' # sudo_u
-  '8 14 default' # phy1729
-  '17 19 command "issue #540"' # echo (not builtin)
-  '21 23 default' # foo
+  '1 2 precommand' # $x
+  # The "" is elided.  If it weren't elided, the «ls» would be highlighted as an ordinary argument.
+  '4 5 single-hyphen-option' # -u
+  '7 13 default' # phy1729
+  '15 16 command' # ls
 )
