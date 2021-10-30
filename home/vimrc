@@ -123,14 +123,24 @@ let g:mapleader = "\<Space>"
 "
 
 "use 256 colors
-set t_Co=256
+set termguicolors
+"set t_Co=256
 
 "set colorscheme (https://github.com/aonemd/kuroi.vim)
 set background=dark
 colorscheme kuroi
 
-set guifont=Consolas:h16
-set guioptions-=LT
+if has('gui_running')
+  " remove toolbar and left scrollbar
+  set guioptions-=LT
+
+  if has('macunix')
+    set guifont=Menlo:h15
+  elseif has('win32')
+    set guifont=Consolas:h14
+  endif
+
+endif
 
 " if we have a mouse why not flaunt it
 if has('mouse')
