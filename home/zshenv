@@ -18,7 +18,7 @@ if [ -x /usr/libexec/path_helper ]; then
     eval `/usr/libexec/path_helper -s`
 fi
 
-export PATH="$HOME/.bin:/usr/local/sbin:$PATH"
+export PATH="$HOME/.bin:/opt/local/bin:/opt/local/sbin:$PATH"
 
 # gather info about the system
 export OS_FAMILY=$(uname -s)
@@ -84,6 +84,11 @@ fi
 
 if which gpgconf &> /dev/null; then
   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+fi
+
+if command -v n &> /dev/null; then
+  export N_PREFIX=$HOME/.n
+  export PATH=$N_PREFIX/bin:$PATH
 fi
 
 # load local environment

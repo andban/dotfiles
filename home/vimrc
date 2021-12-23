@@ -20,6 +20,7 @@ Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
+Plug 'mitsuhiko/vim-python-combined'
 Plug 'prettier/vim-prettier', {
   \ 'do': 'npm install',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'yaml', 'html'] }
@@ -320,6 +321,10 @@ autocmd BufWritePre *.go :CocCommand editor.action.organizeImport
 
 autocmd FileType dockerfile setlocal expandtab ts=4 sw=4 sts=4
 
+"
+" Python
+"
+au BufNewFile,BufWritePre *.py setlocal expandtab ts=4 sw=4 sts=4 shiftround autoindent
 
 "
 " vim-better-whitespace
