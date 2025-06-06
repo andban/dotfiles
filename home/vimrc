@@ -1,10 +1,10 @@
 "plugins
 call plug#begin('~/.vim/plugins')
-Plug 'aonemd/kuroi.vim'
+Plug 'romainl/Apprentice'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara'}
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
 Plug 'tpope/vim-fugitive'
 Plug 'Raimondi/delimitMate'
 Plug 'machakann/vim-sandwich'
@@ -13,7 +13,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'stephpy/vim-yaml'
-Plug 'cespare/vim-toml'
+Plug 'cespare/vim-toml', { 'branch': 'main' }
 Plug 'elzr/vim-json'
 Plug 'plasticboy/vim-markdown'
 Plug 'mxw/vim-jsx'
@@ -123,20 +123,16 @@ let g:mapleader = "\<Space>"
 " UI
 "
 
-"use 256 colors
-set termguicolors
-"set t_Co=256
-
-"set colorscheme (https://github.com/aonemd/kuroi.vim)
+"set colorscheme
 set background=dark
-colorscheme kuroi
+colorscheme apprentice
 
 if has('gui_running')
   " remove toolbar and left scrollbar
   set guioptions-=LT
 
   if has('macunix')
-    set guifont=Menlo:h15
+    set guifont=Menlo:h14
   elseif has('win32')
     set guifont=Consolas:h14
   endif
