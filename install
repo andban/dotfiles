@@ -2,6 +2,7 @@
 
 cd "$(dirname "$0")"
 ROOT=$(pwd)
+BIN_DIR="${HOME}/.local/bin"
 
 set -e
 
@@ -134,11 +135,17 @@ setup_dotfiles() {
     done
 }
 
-setup_homebrew() {
-    if is_osx; then
-        info "setting up homebrew..."
-        source script/setup_homebrew
-    fi
+setup_scripts() {
+    info "installing scripts to '${BIN_DIR}'..."
+
+    mkdir -p "${BIN_DIR}"
+
+    for src in $(find "$ROOT/bin" -mindepth 1 -maxdepth 1); do
+        cmd=$(basename "$src")
+        dst="$BIN_DIR/$cmd"
+
+        link_file "$src" "${dst}"
+    done
 }
 
 setup_terminal() {
@@ -149,6 +156,6 @@ setup_terminal() {
 }
 
 setup_dotfiles
-setup_homebrew
-setup_terminal
+setup_scripts
+#setup_terminal
 
