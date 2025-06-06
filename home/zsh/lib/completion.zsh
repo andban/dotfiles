@@ -1,24 +1,31 @@
-if [ -x "/usr/share/zsh/vendor-completions" ]; then
+if [ -d "/usr/share/zsh/site-functions" ]; then
     fpath=(/usr/share/zsh/vendor-completions $fpath)
 fi
 
-if [ -x "/usr/local/share/zsh-completions" ]; then
+if [ -d "/opt/local/share/zsh/site-functions " ]; then
+    fpath=(/opt/local/share/zsh/site-functions  $fpath)
+fi
+
+if [ -d "/opt/local/share/zsh-completions" ]; then
     fpath=(/usr/local/share/zsh-completions $fpath)
 fi
 
+if [ -d "${ZSH_HOME}/completions" ]; then
+    fpath=(${ZSH_HOME}/completions $fpath)
+fi
 
 # init auto completion
-autoload -Uz compinit
-compinit -i
+autoload -Uz compinit && compinit
 
 
-# don't autoselect first hit
 unsetopt menu_complete
 unsetopt flowcontrol
 
-setopt auto_menu
-setopt complete_in_word
 setopt always_to_end
+setopt complete_in_word
+setopt auto_menu
+#setopt list_types
+
 
 WORDCHARS=''
 
@@ -73,7 +80,6 @@ zstyle ':completion:*:*:*:users' ignored-patterns \
         named netdump news nfsnobody nobody nscd ntp nut nx openvpn \
         operator pcap postfix postgres privoxy pulse pvm quagga radvd \
         rpc rpcuser rpm shutdown squid sshd sync uucp vcsa xfs
-
 # ... unless we really want to.
 zstyle '*' single-ignored show
 

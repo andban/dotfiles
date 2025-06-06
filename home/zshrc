@@ -1,35 +1,23 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
+
+#zmodload zsh/zprof
+autoload -U colors && colors
 
 export ZSH_HOME=~/.zsh
-fpath=($ZSH_HOME/lib $fpath)
-fpath+=("$ZSH_HOME/pure")
-fpath+=(~/.zsh/completion)
-
-autoload -U promptinit; promptinit
-zstyle :prompt:pure:git:stash show yes
-PURE_PROMPT_SYMBOL=";"
-prompt pure
-
-#source "$ZSH_HOME/powerlevel10k/powerlevel10k.zsh-theme"
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-#[[ ! -f "$ZSH_HOME/lib/p10k.zsh" ]] || source "$ZSH_HOME/lib/p10k.zsh"
+fpath+=("$ZSH_HOME/lib")
 
 source $ZSH_HOME/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+setopt auto_cd
+setopt auto_pushd
+
+setopt extended_glob
 
 # do not beep
 setopt no_beep
 
-setopt autocd
-setopt extendedglob
 
 export CLICOLOR=1
 
-setopt HIST_IGNORE_SPACE
 
 # this is needed to get git & ssh to work with the GPG key
 if which gpg-connect-agent &> /dev/null; then
@@ -40,13 +28,23 @@ fi
 # load fzf when present
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# load local environment
-if [ -f "$HOME/.zshrc-private" ]; then
-  source "$HOME/.zshrc-private" ]
-fi
 
 # load config files
 for f in $ZSH_HOME/lib/*.zsh; do
     source $f
 done
+
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+
+# load local environment
+if [ -f "$HOME/.zshrc-private" ]; then
+  source "$HOME/.zshrc-private" ]
+fi
+
+
+#zprof
 

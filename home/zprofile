@@ -12,13 +12,16 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
   setopt xtrace prompt_subst
 fi
 
-# use path_helper and /etc/paths.d on MacOS X
-if [ -x /usr/libexec/path_helper ]; then
-    PATH=''
-    eval `/usr/libexec/path_helper -s`
-fi
-
-export PATH="$HOME/.bin:/opt/local/bin:/opt/local/sbin:$PATH"
+function add_path {
+  local to_add="${1}"
+  if [[ -d "${to_add}" ]]; then
+    if [[ -z "${PATH}" ]]; then
+      export PATH="${to_add}"
+    else
+      export PATH="${PATH}:${to_add}"
+    fi
+  fi
+}
 
 # gather info about the system
 export OS_FAMILY=$(uname -s)
@@ -52,32 +55,44 @@ export HOMEBREW_NO_ANALYTICS=1
 export HOMEBREW_NO_INSECURE_REDIRECT=1
 export HOMEBREW_CASK_OPTS=--require-sha
 
+
+export PATH=""
+# use path_helper and /etc/paths.d on MacOS X
+if [ -x /usr/libexec/path_helper ]; then
+    eval `/usr/libexec/path_helper -s`
+fi
+
+add_path "${HOME}/.local/bin"
+
+# MacPort
+add_path "/opt/local/bin"
+add_path "/opt/local/sbin"
+
 # setup rbenv, if present
 if which rbenv &> /dev/null; then
-    export PATH="$HOME/.rbenv/bin:$PATH"çƒ
+    add_path "${HOME}/.rbenv/bin"
     eval "$(rbenv init -)"
 fi
 
-#if which brew &> /dev/null && brew --prefix nvm &> /dev/null ; then
-#    export NVM_DIR=~/.nvm
-#    source $(brew --prefix nvm)/nvm.sh --no-use
-#fi
+# setup n node environment, if present
+if command -v n &> /dev/null; then
+  export N_PREFIX="$HOME/.n"
+  add_path "${N_PREFIX}/bin"
+fi
+
+# setup direnv
+if command -v direnv &> /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
 
 # setup pip
 export PIP_REQUIRE_VIRTUALENV=true
 export PIP_DOWNLOAD_CACHE="$HOME/.pip/cache"
 
-
-###
-# decide which one...
-
-# setup autoenv
-#source $(brew --prefix autoenv)/activate.sh
-
-# setup direnv
-if which direnv &> /dev/null; then
-  eval "$(direnv hook zsh)"
-fi
+# setup golang
+export GOPATH="$HOME/.go"
+export GO111MODULE=on
+add_path="${GOPATH}/bin"
 
 #
 ###
@@ -86,14 +101,9 @@ if which gpgconf &> /dev/null; then
   export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 fi
 
-if command -v n &> /dev/null; then
-  export N_PREFIX=$HOME/.n
-  export PATH=$N_PREFIX/bin:$PATH
-fi
-
 # load local environment
-if [ -f "$HOME/.zshenv-private" ]; then
-  source "$HOME/.zshenv-private" ]
+if [ -f "$HOME/.zprofile-private" ]; then
+  source "$HOME/.zprofile-private" ]
 fi
 
 if [[ "$PROFILE_STARTUP" == true ]]; then
@@ -101,9 +111,4 @@ if [[ "$PROFILE_STARTUP" == true ]]; then
   unsetopt xtrace
   exec 2>&3 3>&-
 fi
-
-export GOPATH="$HOME/.go"
-export GO111MODULE=on
-export PATH="$PATH:$GOPATH/bin"
-
 
