@@ -105,10 +105,6 @@ function gca() {
 #######################################################################
 
 if [[ $OS_FAMILY == "Darwin" ]]; then
-    if [ -x ~/Applications/love.app/Contents/MacOS/love ]; then
-        alias love="~/Applications/love.app/Contents/MacOS/love"
-    fi
-
     # use case insensitive matching and show full paths to binaries
     alias pgrep='prgep -fli'
 else
@@ -198,5 +194,5 @@ alias dterm='docker run -it --rm --privileged --pid=host justincormack/nsenter1'
 #
 # Random stuff
 ##############################################################################
-alias ocean='play -c 2 -n synth pinknoise band -n 2500 4000 tremolo 0.03 5 reverb 20 gain'
+alias ocean='play -n synth brownnoise synth pinknoise mix synth 0 0 0 10 10 40 trapezium amod 0.1 30'
 alias enterprise='play -c2 -n synth whitenoise band -n 100 24 band -n 300 100 gain +20'

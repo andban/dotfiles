@@ -92,5 +92,5 @@ function dradio() {
 
 function rand_token() {
   local len="${1:-16}"
-  cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z0-9' | fold -w "$len" | head -n 1
+  cat /dev/urandom | LC_CTYPE=C tr -dc 'a-zA-Z0-9!@$%&?' | fold -w "$len" | head -n 1
 }
