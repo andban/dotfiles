@@ -2,28 +2,28 @@
 ! Set $TERM variable
 URxvt.termName: rxvt-unicode-256color
 
-!! Atelier Forest colorscheme for Xresources/Xdefaults
+!! Apprentice colorscheme for Xresources/Xdefaults
 
-#define S_black         #1b1918
-#define S_brblack       #766e6b
-#define S_red           #f22c40
-#define S_brred         #f22c40
-#define S_green         #5ab738
-#define S_brgreen       #5ab738
-#define S_yellow        #d5911a
-#define S_bryellow      #d78700
-#define S_blue          #407ee7
-#define S_brblue        #407ee7
-#define S_magenta       #6666ea
-#define S_brmagenta     #6666ea
-#define S_cyan          #00ad9c
-#define S_brcyan        #00ad9c
-#define S_white         #a8a19f
-#define S_brwhite       #f1efee
+#define S_black         #1C1C1C
+#define S_brblack       #444444
+#define S_red           #AF5F5F
+#define S_brred         #FF8700
+#define S_green         #5F875F
+#define S_brgreen       #87AF87
+#define S_yellow        #87875F
+#define S_bryellow      #FFFFAF
+#define S_blue          #5F87AF
+#define S_brblue        #87AFD7
+#define S_magenta       #5F5F87
+#define S_brmagenta     #8787AF
+#define S_cyan          #5F8787
+#define S_brcyan        #5FAFAF
+#define S_white         #6C6C6C
+#define S_brwhite       #FFFFFF
 
-#define S_background    #1b1918
-#define S_foreground    #c5c8c6
-#define S_selection     #373b41
+#define S_background    #262626
+#define S_foreground    #BCBCBC
+#define S_selection     #5F8787
 
 *background:            S_background
 URxvt*background:       [90]S_background
