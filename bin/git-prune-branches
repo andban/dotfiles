@@ -1,0 +1,33 @@
+#!/usr/bin/env sh
+
+program="$(basename "${0}")"
+
+print_usage() {
+    expand -t 4 << EOF
+Usage:
+    ${program}
+        Delete local tracking branches that do not exist on remote.
+
+Options:
+    -h, --help
+        Show this usage information and exit.
+EOF
+}
+
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h|--help)
+            print_usage
+            exit 0
+            ;;
+        -*)
+            echo "Unknown parameter '$1'"
+            exiit 1
+            ;;
+    esac
+done
+
+git remote prune origin
+git for-each-ref --format '%(refname:short) %(upstream:track)' | awk '$2 == "[gone]" {print $1}' | xargs -r git branch -D
+

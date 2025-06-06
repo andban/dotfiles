@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+
+program="$(basename "${0}")"
+quiet=0
+
+print_usage() {
+  expand -t 4 << EOF
+Usage:
+  $program
+    Returns success when the current working tree has no changes.
+
+Options:
+  -q, --quiet
+    Do not print anything to the console.
+
+  -h, --help
+    Show this usage information and exit.
+EOF
+}
+
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -q|--quiet)
+      quiet=1
+      shift
+      ;;
+    -h|--help)
+      print_usage
+      exit 0
+      ;;
+    -*)
+      echo "$program: Unknown option: $1" >&2
+      exit 1
+      ;;
+    *)
+      echo "$program: Unexpected argument: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+status="$(git status --porcelain)"
+success=$?
+
+
+
+if [[ -z $status ]]; then
+  [[ "$quiet" -eq 0 ]] && echo "working tree is clean"
+  exit 0
+else
+  [[ "$quiet" -eq 0 ]] && echo "working tree has uncommited changes"
+  exit 1
+fi
+
